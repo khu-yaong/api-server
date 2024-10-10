@@ -1,8 +1,8 @@
 ---
-name: "[FEAT] Issue Name"
-about: 신규 기능 구현
-title: "[FEAT]"
-labels: "\U0001F31F Feat"
+name: "[TEST]"
+about: " 테스트 코드 작성"
+title: "[TEST]"
+labels: "✅ Test"
 assignees: ''
 
 ---
