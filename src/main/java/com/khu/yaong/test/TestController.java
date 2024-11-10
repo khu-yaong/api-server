@@ -1,4 +1,4 @@
-package com.khu.yaong.controller;
+package com.khu.yaong.test;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
