@@ -1,4 +1,4 @@
-package com.khu.yaong.config;
+package com.khu.yaong.global.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

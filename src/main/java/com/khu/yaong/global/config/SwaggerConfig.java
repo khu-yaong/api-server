@@ -1,4 +1,4 @@
-package com.khu.yaong.config;
+package com.khu.yaong.global.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
