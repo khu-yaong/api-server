@@ -4,16 +4,13 @@ import com.khu.yaong.domain.common.BaseTime;
 import com.khu.yaong.domain.member.domain.Member;
 import com.khu.yaong.domain.post.domain.Post;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Comment extends BaseTime {
 
     @Id
@@ -25,6 +22,7 @@ public class Comment extends BaseTime {
     @JoinColumn(name = "member_id", nullable = false)
     private Member author;
 
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;

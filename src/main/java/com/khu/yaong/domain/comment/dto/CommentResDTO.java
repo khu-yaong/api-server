@@ -23,6 +23,7 @@ public class CommentResDTO {
         private final Team authorTeam;
 
         // comment info
+        private final Long commentId;
         private final String content;
         private final LocalDateTime createdDate;
 
@@ -31,6 +32,9 @@ public class CommentResDTO {
                     .authorName(comment.getAuthor().getUsername())
                     .authorProfileImage(comment.getAuthor().getProfileImage())
                     .authorTeam(comment.getAuthor().getTeam())
+                    .commentId(comment.getId())
+                    .content(comment.getContent())
+                    .createdDate(comment.getCreatedDate())
                     .build();
         }
     }

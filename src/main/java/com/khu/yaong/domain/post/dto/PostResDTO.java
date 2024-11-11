@@ -25,6 +25,7 @@ public class PostResDTO {
         private final Team authorTeam;
 
         // post info
+        private final Long postId;
         private final String title;
         private final String content;
         private final String imageUrl;
