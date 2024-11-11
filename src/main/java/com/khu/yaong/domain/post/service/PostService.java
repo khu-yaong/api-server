@@ -11,7 +11,11 @@ public interface PostService {
 
     PostResDTO.PostDetailDTO updatePost(Long postId, PostReqDTO.PostDTO postDTO);
 
+    PostResDTO.PostDetailDTO getPost(Long postId);
+
 /*---------------------------------------- 좋아요 ----------------------------------------*/
+
+    //PostResDTO.PostStatusDTO likePost(Long postId);
 
 /*---------------------------------------- 댓글 ----------------------------------------*/
 }

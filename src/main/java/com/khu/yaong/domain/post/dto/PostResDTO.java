@@ -52,4 +52,22 @@ public class PostResDTO {
                     .build();
         }
     }
+
+    @Getter
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+    @Builder(access = AccessLevel.PRIVATE)
+    public static class PostStatusDTO {
+
+        private final Long postId;
+        private final Long likeCount;
+        private final Long countComment;
+
+        public static PostStatusDTO toDTO(Post post) {
+            return PostStatusDTO.builder()
+                    .postId(post.getId())
+                    .likeCount(post.getCountLike())
+                    .countComment(post.getCountComment())
+                    .build();
+        }
+    }
 }

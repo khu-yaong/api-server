@@ -2,6 +2,7 @@ package com.khu.yaong.domain.post.domain;
 
 import com.khu.yaong.domain.comment.domain.Comment;
 import com.khu.yaong.domain.common.BaseTime;
+import com.khu.yaong.domain.mapping.domain.MemberPostLike;
 import com.khu.yaong.domain.member.domain.Member;
 import com.khu.yaong.domain.post.dto.PostReqDTO;
 import jakarta.persistence.*;
@@ -45,12 +46,23 @@ public class Post extends BaseTime {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
+    @Builder.Default
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MemberPostLike> memberPostLikes = new ArrayList<>();
 
     public void addComment(Comment comment) {
         comments.add(comment);
         comment.setPost(this);
     }
 
+    public void addMemberPostLike(MemberPostLike memberPostLike) {
+        memberPostLikes.add(memberPostLike);
+        memberPostLike.setPost(this);
+    }
+
+    public void plusCountLike() {
+        this.countLike++;
+    }
     public void updatePost(String title, String content, String imageUrl) {
         this.title = title;
         this.content = content;
