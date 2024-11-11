@@ -25,6 +25,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Entity
 @Getter
@@ -68,6 +69,7 @@ public class Member extends BaseTime {
     @CollectionTable(name = "member_roles", joinColumns = @JoinColumn(name = "member_id"))
     @Column(name = "role")
     private Set<String> roles; // 사용자 역할 목록 (예: ROLE_USER, ROLE_ADMIN)
+    
     // 권한 목록을 반환하는 메서드
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
