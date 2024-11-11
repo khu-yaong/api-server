@@ -17,5 +17,7 @@ public interface PostService {
 
     PostResDTO.PostStatusDTO likePost(Long postId);
 
+    PostResDTO.PostStatusDTO cancelLikePost(Long postId);
+
 /*---------------------------------------- 댓글 ----------------------------------------*/
 }

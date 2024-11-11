@@ -60,9 +60,18 @@ public class Post extends BaseTime {
         memberPostLike.setPost(this);
     }
 
+    public void deleteMemberPostLike(MemberPostLike memberPostLike) {
+        memberPostLikes.remove(memberPostLike);
+    }
+
     public void plusCountLike() {
         this.countLike++;
     }
+
+    public void minusCountLike() {
+        this.countLike--;
+    }
+
     public void updatePost(String title, String content, String imageUrl) {
         this.title = title;
         this.content = content;
