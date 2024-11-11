@@ -35,5 +35,5 @@ out/
 
 ### VS Code ###
 .vscode/
-
+src/main/resources/application.yml
 application-security.properties
