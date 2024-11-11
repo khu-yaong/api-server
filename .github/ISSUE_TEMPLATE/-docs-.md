@@ -14,9 +14,4 @@ assignees: ''
 *
 *
 
-***
 
-Issue 생성자
-|---|
-|<div align="center"><img src="https://contrib.rocks/image?repo={github 아이디}/{본인 public repository 이름 아무거나}" /></div>|
-|<div align="center">{이름}</div>|
