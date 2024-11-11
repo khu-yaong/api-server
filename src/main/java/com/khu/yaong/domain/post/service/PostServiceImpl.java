@@ -3,6 +3,8 @@ package com.khu.yaong.domain.post.service;
 import com.khu.yaong.domain.mapping.domain.MemberPostLike;
 import com.khu.yaong.domain.mapping.repository.MemberPostLikeRepository;
 import com.khu.yaong.domain.member.domain.Member;
+import com.khu.yaong.domain.mapping.domain.MemberPostLike;
+import com.khu.yaong.domain.mapping.repository.MemberPostLikeRepository;
 import com.khu.yaong.domain.member.domain.Member;
 import com.khu.yaong.domain.member.repository.MemberRepository;
 import com.khu.yaong.domain.post.domain.Post;
