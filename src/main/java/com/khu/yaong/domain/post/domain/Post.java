@@ -4,15 +4,16 @@ import com.khu.yaong.domain.comment.domain.Comment;
 import com.khu.yaong.domain.common.BaseTime;
 import com.khu.yaong.domain.member.domain.Member;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Post extends BaseTime {
 
     @Id
@@ -20,6 +21,7 @@ public class Post extends BaseTime {
     @Column(name = "post_id")
     private Long id; // 게시글 ID
 
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member author; // 작성자
@@ -38,6 +40,7 @@ public class Post extends BaseTime {
     @Column(name = "count_comment", nullable = false)
     private Long countComment = 0L;
 
+    @Builder.Default
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 }
