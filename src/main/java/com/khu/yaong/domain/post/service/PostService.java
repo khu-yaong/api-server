@@ -9,6 +9,8 @@ public interface PostService {
 
     PostResDTO.PostDetailDTO createPost(PostReqDTO.PostDTO postDTO);
 
+    PostResDTO.PostDetailDTO updatePost(Long postId, PostReqDTO.PostDTO postDTO);
+
 /*---------------------------------------- 좋아요 ----------------------------------------*/
 
 /*---------------------------------------- 댓글 ----------------------------------------*/

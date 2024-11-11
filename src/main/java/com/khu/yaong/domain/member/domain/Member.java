@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.NoSuchElementException;
 
 @Entity
 @Getter
@@ -76,9 +77,13 @@ public class Member extends BaseTime {
         post.setAuthor(this);
     }
 
-    public void addMemberPostLike(MemberPostLike memberPostLike) {
-        memberPostLikes.add(memberPostLike);
-        memberPostLike.setMember(this);
+    public void updatePost(Post updatedPost) {
+        Post existingPost = posts.stream()
+                .filter(post -> post.getId().equals(updatedPost.getId()))
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException("해당 ID의 게시물을 찾을 수 없습니다."));
+        existingPost.updatePost(updatedPost.getTitle(), updatedPost.getContent(), updatedPost.getImageUrl());
+        updatedPost.setAuthor(this);
     }
 }
 

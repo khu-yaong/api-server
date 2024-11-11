@@ -40,6 +40,23 @@ public class PostServiceImpl implements PostService {
         return PostResDTO.PostDetailDTO.toDTO(savedPost);
     }
 
+    @Override
+    public PostResDTO.PostDetailDTO updatePost(Long postId, PostReqDTO.PostDTO postDTO) {
+
+        // Authorization 구현 후 수정 예정
+        Member author = memberRepository.findById(1L)
+                .orElseThrow(RuntimeException::new);
+
+        Post post = postRepository.findById(postId)
+                .orElseThrow(RuntimeException::new);
+
+        post.updatePost(postDTO.getTitle(), postDTO.getContent(), postDTO.getImageUrl());
+        Post updatedPost = postRepository.save(post);
+        author.updatePost(updatedPost);
+
+        return PostResDTO.PostDetailDTO.toDTO(updatedPost);
+    }
+
 /*---------------------------------------- 좋아요 ----------------------------------------*/
 
 /*---------------------------------------- 댓글 ----------------------------------------*/
