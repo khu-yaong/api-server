@@ -33,9 +33,6 @@ public class PostResDTO {
         private final Long countLike;
         private final Long countComment;
 
-        // comment info
-        private final List<CommentResDTO.CommentDetailDTO> comments;
-
         public static PostInfoDTO toDTO(Post post) {
             return PostInfoDTO.builder()
                     .authorName(post.getAuthor().getUsername())
