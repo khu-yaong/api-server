@@ -15,7 +15,7 @@ public interface PostService {
 
 /*---------------------------------------- 좋아요 ----------------------------------------*/
 
-    //PostResDTO.PostStatusDTO likePost(Long postId);
+    PostResDTO.PostStatusDTO likePost(Long postId);
 
 /*---------------------------------------- 댓글 ----------------------------------------*/
 }

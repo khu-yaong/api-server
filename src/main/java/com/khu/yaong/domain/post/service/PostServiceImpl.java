@@ -73,7 +73,33 @@ public class PostServiceImpl implements PostService {
 
 /*---------------------------------------- 좋아요 ----------------------------------------*/
 
+    @Override
+    public PostResDTO.PostStatusDTO likePost(Long postId) {
 
+        // Authorization 구현 후 수정 예정
+        Member member = memberRepository.findById(1L)
+                .orElseThrow(RuntimeException::new);
+
+        Post post = postRepository.findById(postId)
+                .orElseThrow(RuntimeException::new);
+
+        // 중복해서 좋아요를 누를 수 없음
+        if (memberPostLikeRepository.existsByMemberIdAndPostId(member.getId(), post.getId())) {
+            throw new RuntimeException("중복 좋아요 불가");
+        }
+
+        MemberPostLike memberPostLike = MemberPostLike.builder()
+                .member(member)
+                .post(post)
+                .build();
+
+        MemberPostLike savedMemberPostLike = memberPostLikeRepository.save(memberPostLike);
+        post.addMemberPostLike(savedMemberPostLike);
+        post.plusCountLike();
+        Post updatedPost = postRepository.save(post);
+
+        return PostResDTO.PostStatusDTO.toDTO(updatedPost);
+    }
 
 /*---------------------------------------- 댓글 ----------------------------------------*/
 }
