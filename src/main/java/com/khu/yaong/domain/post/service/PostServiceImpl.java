@@ -125,5 +125,5 @@ public class PostServiceImpl implements PostService {
         return PostResDTO.PostStatusDTO.toDTO(updatedPost);
     }
 
-    /*---------------------------------------- 댓글 ----------------------------------------*/
+/*---------------------------------------- 댓글 ----------------------------------------*/
 }
