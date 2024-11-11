@@ -17,7 +17,7 @@ public class PostResDTO {
     @Getter
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     @Builder(access = AccessLevel.PRIVATE)
-    public static class PostDetailDTO {
+    public static class PostInfoDTO {
 
         // author info
         private final String authorName;
@@ -32,11 +32,8 @@ public class PostResDTO {
         private final Long countLike;
         private final Long countComment;
 
-        // comment info
-        private final List<CommentResDTO.CommentDetailDTO> comments;
-
-        public static PostDetailDTO toDTO(Post post) {
-            return PostDetailDTO.builder()
+        public static PostInfoDTO toDTO(Post post) {
+            return PostInfoDTO.builder()
                     .authorName(post.getAuthor().getUsername())
                     .authorProfileImage(post.getAuthor().getProfileImage())
                     .authorTeam(post.getAuthor().getTeam())
@@ -46,6 +43,21 @@ public class PostResDTO {
                     .createdDate(post.getCreatedDate())
                     .countLike(post.getCountLike())
                     .countComment(post.getCountComment())
+                    .build();
+        }
+    }
+
+    @Getter
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+    @Builder(access = AccessLevel.PRIVATE)
+    public static class PostDetailDTO {
+
+        private final PostInfoDTO post;
+        private final List<CommentResDTO.CommentDetailDTO> comments;
+
+        public static PostDetailDTO toDTO(Post post) {
+            return PostDetailDTO.builder()
+                    .post(PostInfoDTO.toDTO(post))
                     .comments(post.getComments().stream()
                             .map(CommentResDTO.CommentDetailDTO::toDTO)
                             .toList())
