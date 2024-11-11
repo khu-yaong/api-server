@@ -2,6 +2,7 @@ package com.khu.yaong.domain.comment.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import lombok.Getter;
 
 @Getter
 public class CommentReqDTO {
