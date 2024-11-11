@@ -38,6 +38,7 @@ public class PostResDTO {
                     .authorName(post.getAuthor().getUsername())
                     .authorProfileImage(post.getAuthor().getProfileImage())
                     .authorTeam(post.getAuthor().getTeam())
+                    .postId(post.getId())
                     .title(post.getTitle())
                     .content(post.getContent())
                     .imageUrl(post.getImageUrl())
