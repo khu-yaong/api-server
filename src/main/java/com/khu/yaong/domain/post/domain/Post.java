@@ -28,6 +28,10 @@ public class Post extends BaseTime {
     @JoinColumn(name = "member_id", nullable = false)
     private Member author; // 작성자
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Category category;
+
     @Column(nullable = false, length = 100)
     private String title;
 
@@ -76,7 +80,8 @@ public class Post extends BaseTime {
         this.countLike--;
     }
 
-    public void updatePost(String title, String content, String imageUrl) {
+    public void updatePost(Category category, String title, String content, String imageUrl) {
+        this.category = category;
         this.title = title;
         this.content = content;
         this.imageUrl = imageUrl;

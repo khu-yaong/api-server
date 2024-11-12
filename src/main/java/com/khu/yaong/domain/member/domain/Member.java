@@ -90,7 +90,7 @@ public class Member extends BaseTime {
                 .filter(post -> post.getId().equals(updatedPost.getId()))
                 .findFirst()
                 .orElseThrow(() -> new NoSuchElementException("해당 ID의 게시물을 찾을 수 없습니다."));
-        existingPost.updatePost(updatedPost.getTitle(), updatedPost.getContent(), updatedPost.getImageUrl());
+        existingPost.updatePost(updatedPost.getCategory(), updatedPost.getTitle(), updatedPost.getContent(), updatedPost.getImageUrl());
         updatedPost.setAuthor(this);
     }
 

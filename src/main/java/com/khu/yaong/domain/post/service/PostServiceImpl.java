@@ -40,6 +40,7 @@ public class PostServiceImpl implements PostService {
 
         Post post = Post.builder()
                 .author(author)
+                .category(postDTO.getCategory())
                 .title(postDTO.getTitle())
                 .content(postDTO.getContent())
                 .imageUrl(postDTO.getImageUrl())
@@ -68,7 +69,7 @@ public class PostServiceImpl implements PostService {
             throw new BaseException(PostErrorCode.POST_AUTHOR_ONLY_ALLOWED);
         }
 
-        post.updatePost(postDTO.getTitle(), postDTO.getContent(), postDTO.getImageUrl());
+        post.updatePost(postDTO.getCategory(), postDTO.getTitle(), postDTO.getContent(), postDTO.getImageUrl());
         Post updatedPost = postRepository.save(post);
         member.updatePost(updatedPost);
 
