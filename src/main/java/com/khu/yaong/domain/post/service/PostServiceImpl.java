@@ -11,6 +11,9 @@ import com.khu.yaong.domain.post.domain.Post;
 import com.khu.yaong.domain.post.dto.PostReqDTO;
 import com.khu.yaong.domain.post.dto.PostResDTO;
 import com.khu.yaong.domain.post.repository.PostRepository;
+import com.khu.yaong.global.common.exception.BaseException;
+import com.khu.yaong.global.common.response.member.MemberErrorCode;
+import com.khu.yaong.global.common.response.post.PostErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +34,7 @@ public class PostServiceImpl implements PostService {
 
         // Authorization 구현 후 수정 예정
         Member author = memberRepository.findById(1L)
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(() -> new BaseException(MemberErrorCode.MEMBER_NOT_FOUND));
 
         Post post = Post.builder()
                 .author(author)
@@ -53,10 +56,10 @@ public class PostServiceImpl implements PostService {
 
         // Authorization 구현 후 수정 예정
         Member author = memberRepository.findById(1L)
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(() -> new BaseException(MemberErrorCode.MEMBER_NOT_FOUND));
 
         Post post = postRepository.findById(postId)
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(() -> new BaseException(PostErrorCode.POST_NOT_FOUND));
 
         post.updatePost(postDTO.getTitle(), postDTO.getContent(), postDTO.getImageUrl());
         Post updatedPost = postRepository.save(post);
@@ -81,14 +84,14 @@ public class PostServiceImpl implements PostService {
 
         // Authorization 구현 후 수정 예정
         Member member = memberRepository.findById(1L)
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(() -> new BaseException(MemberErrorCode.MEMBER_NOT_FOUND));
 
         Post post = postRepository.findById(postId)
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(() -> new BaseException(PostErrorCode.POST_NOT_FOUND));
 
         // 중복해서 좋아요를 누를 수 없음
         if (memberPostLikeRepository.existsByMemberIdAndPostId(member.getId(), postId)) {
-            throw new RuntimeException("중복 좋아요 불가");
+            throw new BaseException(PostErrorCode.DUPLICATE_POST_LIKES_NOT_ALLOWED);
         }
 
         MemberPostLike memberPostLike = MemberPostLike.builder()
@@ -109,10 +112,10 @@ public class PostServiceImpl implements PostService {
 
         // Authorization 구현 후 수정 예정
         Member member = memberRepository.findById(1L)
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(() -> new BaseException(MemberErrorCode.MEMBER_NOT_FOUND));
 
         Post post = postRepository.findById(postId)
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(() -> new BaseException(PostErrorCode.POST_NOT_FOUND));
 
         MemberPostLike memberPostLike = memberPostLikeRepository.findByMemberIdAndPostId(member.getId(), postId)
                 .orElseThrow(RuntimeException::new);
@@ -124,6 +127,4 @@ public class PostServiceImpl implements PostService {
 
         return PostResDTO.PostStatusDTO.toDTO(updatedPost);
     }
-
-/*---------------------------------------- 댓글 ----------------------------------------*/
 }
