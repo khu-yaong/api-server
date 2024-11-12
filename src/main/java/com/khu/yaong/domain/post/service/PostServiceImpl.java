@@ -4,10 +4,12 @@ import com.khu.yaong.domain.comment.repository.CommentRepository;
 import com.khu.yaong.domain.mapping.domain.MemberPostLike;
 import com.khu.yaong.domain.mapping.repository.MemberPostLikeRepository;
 import com.khu.yaong.domain.member.domain.Member;
+import com.khu.yaong.domain.member.domain.Team;
 import com.khu.yaong.domain.mapping.domain.MemberPostLike;
 import com.khu.yaong.domain.mapping.repository.MemberPostLikeRepository;
 import com.khu.yaong.domain.member.domain.Member;
 import com.khu.yaong.domain.member.repository.MemberRepository;
+import com.khu.yaong.domain.post.domain.Category;
 import com.khu.yaong.domain.post.domain.Post;
 import com.khu.yaong.domain.post.dto.PostReqDTO;
 import com.khu.yaong.domain.post.dto.PostResDTO;
@@ -18,6 +20,9 @@ import com.khu.yaong.global.common.response.post.PostErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -105,6 +110,13 @@ public class PostServiceImpl implements PostService {
         member.deletePost(post);
 
         return PostResDTO.PostStatusDTO.toDTO(post);
+    }
+
+    @Override
+    public List<PostResDTO.PostInfoDTO> getPosts(Category category, Team team, LocalDateTime cursorDateTime, Long cursorPostId, Integer pageSize) {
+        return postRepository.findPostsByCategoryAndTeam(category, team, cursorDateTime, cursorPostId, pageSize).stream()
+                .map(PostResDTO.PostInfoDTO::toDTO)
+                .toList();
     }
 
 
