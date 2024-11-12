@@ -1,5 +1,6 @@
 package com.khu.yaong.domain.post.service;
 
+import com.khu.yaong.domain.comment.repository.CommentRepository;
 import com.khu.yaong.domain.mapping.domain.MemberPostLike;
 import com.khu.yaong.domain.mapping.repository.MemberPostLikeRepository;
 import com.khu.yaong.domain.member.domain.Member;
@@ -26,6 +27,7 @@ public class PostServiceImpl implements PostService {
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
     private final MemberPostLikeRepository memberPostLikeRepository;
+    private final CommentRepository commentRepository;
 
 /*---------------------------------------- 게시글 ----------------------------------------*/
 
@@ -96,6 +98,8 @@ public class PostServiceImpl implements PostService {
             throw new BaseException(PostErrorCode.POST_AUTHOR_ONLY_ALLOWED);
         }
 
+        // 게시글 댓글 삭제
+        commentRepository.deleteAllByPostId(postId);
         postRepository.delete(post);
         member.deletePost(post);
 
