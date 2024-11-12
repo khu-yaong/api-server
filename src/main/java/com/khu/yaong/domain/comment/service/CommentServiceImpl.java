@@ -8,6 +8,10 @@ import com.khu.yaong.domain.member.domain.Member;
 import com.khu.yaong.domain.member.repository.MemberRepository;
 import com.khu.yaong.domain.post.domain.Post;
 import com.khu.yaong.domain.post.repository.PostRepository;
+import com.khu.yaong.global.common.exception.BaseException;
+import com.khu.yaong.global.common.response.comment.CommentErrorCode;
+import com.khu.yaong.global.common.response.member.MemberErrorCode;
+import com.khu.yaong.global.common.response.post.PostErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,10 +30,10 @@ public class CommentServiceImpl implements CommentService {
 
         // Authorization 구현 후 수정 예정
         Member author = memberRepository.findById(1L)
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(() -> new BaseException(MemberErrorCode.MEMBER_NOT_FOUND));
 
         Post post = postRepository.findById(postId)
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(() -> new BaseException(PostErrorCode.POST_NOT_FOUND));
 
         Comment comment = Comment.builder()
                 .author(author)
@@ -48,9 +52,9 @@ public class CommentServiceImpl implements CommentService {
 
         // Authorization 구현 후 수정 예정
         Member author = memberRepository.findById(1L)
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(() -> new BaseException(MemberErrorCode.MEMBER_NOT_FOUND));
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(() -> new BaseException(CommentErrorCode.COMMENT_NOT_FOUND));
 
         // 댓글 작성자만 삭제 가능
         if (!comment.getAuthor().getId().equals(author.getId())) {
