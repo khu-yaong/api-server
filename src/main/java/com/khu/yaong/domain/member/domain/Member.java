@@ -69,7 +69,7 @@ public class Member extends BaseTime {
     @CollectionTable(name = "member_roles", joinColumns = @JoinColumn(name = "member_id"))
     @Column(name = "role")
     private Set<String> roles; // 사용자 역할 목록 (예: ROLE_USER, ROLE_ADMIN)
-    
+
     // 권한 목록을 반환하는 메서드
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
@@ -92,6 +92,10 @@ public class Member extends BaseTime {
                 .orElseThrow(() -> new NoSuchElementException("해당 ID의 게시물을 찾을 수 없습니다."));
         existingPost.updatePost(updatedPost.getTitle(), updatedPost.getContent(), updatedPost.getImageUrl());
         updatedPost.setAuthor(this);
+    }
+
+    public void deletePost(Post post) {
+        posts.remove(post);
     }
 
     public void addMemberPostLike(MemberPostLike memberPostLike) {

@@ -55,15 +55,20 @@ public class PostServiceImpl implements PostService {
     public PostResDTO.PostDetailDTO updatePost(Long postId, PostReqDTO.PostDTO postDTO) {
 
         // Authorization 구현 후 수정 예정
-        Member author = memberRepository.findById(1L)
+        Member member = memberRepository.findById(1L)
                 .orElseThrow(() -> new BaseException(MemberErrorCode.MEMBER_NOT_FOUND));
 
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new BaseException(PostErrorCode.POST_NOT_FOUND));
 
+        // 게시글 작성자와 로그인 회원 일치 여부 확인
+        if (!member.equals(post.getAuthor())) {
+            throw new BaseException(PostErrorCode.POST_AUTHOR_ONLY_ALLOWED);
+        }
+
         post.updatePost(postDTO.getTitle(), postDTO.getContent(), postDTO.getImageUrl());
         Post updatedPost = postRepository.save(post);
-        author.updatePost(updatedPost);
+        member.updatePost(updatedPost);
 
         return PostResDTO.PostDetailDTO.toDTO(updatedPost);
     }
@@ -76,8 +81,29 @@ public class PostServiceImpl implements PostService {
         return PostResDTO.PostDetailDTO.toDTO(post);
     }
 
+    @Override
+    public PostResDTO.PostStatusDTO deletePost(Long postId) {
 
-/*---------------------------------------- 좋아요 ----------------------------------------*/
+        // Authorization 구현 후 수정 예정
+        Member member = memberRepository.findById(1L)
+                .orElseThrow(() -> new BaseException(MemberErrorCode.MEMBER_NOT_FOUND));
+
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new BaseException(PostErrorCode.POST_NOT_FOUND));
+
+        // 게시글 작성자와 로그인 회원 일치 여부 확인
+        if (!member.equals(post.getAuthor())) {
+            throw new BaseException(PostErrorCode.POST_AUTHOR_ONLY_ALLOWED);
+        }
+
+        postRepository.delete(post);
+        member.deletePost(post);
+
+        return PostResDTO.PostStatusDTO.toDTO(post);
+    }
+
+
+    /*---------------------------------------- 좋아요 ----------------------------------------*/
 
     @Override
     public PostResDTO.PostStatusDTO likePost(Long postId) {

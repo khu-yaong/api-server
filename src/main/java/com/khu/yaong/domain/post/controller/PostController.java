@@ -53,6 +53,17 @@ public class PostController {
         return ApiResponse.success(PostSuccessCode.POST_FOUND, postDetailDTO);
     }
 
+    @Operation(summary = "[구현완료] 게시글 삭제하기", description = """
+    ## 작성한 게시글을 삭제합니다.
+    * input : postId
+    * output : 삭제된 게시글의 요약 정보 (id, 좋아요 수, 댓글 수)
+    """)
+    @DeleteMapping("/posts/{postId}")
+    ApiResponse<PostResDTO.PostStatusDTO> deletePost(@PathVariable Long postId) {
+        PostResDTO.PostStatusDTO postStatusDTO = postService.deletePost(postId);
+        return ApiResponse.success(PostSuccessCode.POST_DELETED, postStatusDTO);
+    }
+
 /*---------------------------------------- 좋아요 ----------------------------------------*/
 
     @Operation(summary = "[구현완료] 게시글 좋아요 누르기", description = """

@@ -13,10 +13,11 @@ public interface PostService {
 
     PostResDTO.PostDetailDTO getPost(Long postId);
 
+    PostResDTO.PostStatusDTO deletePost(Long postId);
+
 /*---------------------------------------- 좋아요 ----------------------------------------*/
 
     PostResDTO.PostStatusDTO likePost(Long postId);
 
     PostResDTO.PostStatusDTO cancelLikePost(Long postId);
-
 }

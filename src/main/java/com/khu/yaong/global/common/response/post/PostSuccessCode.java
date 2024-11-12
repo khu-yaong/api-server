@@ -10,6 +10,7 @@ public enum PostSuccessCode implements SuccessResponse {
     POST_FOUND(HttpStatus.OK, "POST2003", "게시글 조회에 성공하였습니다."),
     POST_LIKED(HttpStatus.CREATED, "POST2004", "게시글 좋아요에 성공하였습니다."),
     POST_LIKE_CANCELED(HttpStatus.OK, "POST2005", "게시글 좋아요를 취소하였습니다."),
+    POST_DELETED(HttpStatus.OK, "POST2006", "게시글이 삭제되었습니다."),
 
     ;
     private final HttpStatus httpStatus;

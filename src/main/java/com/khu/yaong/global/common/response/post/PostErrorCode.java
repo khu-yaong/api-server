@@ -7,6 +7,8 @@ public enum PostErrorCode implements ErrorResponse {
 
     POST_NOT_FOUND(HttpStatus.NOT_FOUND, "POST4001", "게시글을 찾을 수 없습니다."),
     DUPLICATE_POST_LIKES_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "POST4002", "게시글에 중복으로 좋아요를 누를 수 없습니다."),
+    POST_AUTHOR_ONLY_ALLOWED(HttpStatus.FORBIDDEN, "POST4003", "게시글 작성자가 아닙니다."),
+
     ;
 
     private final HttpStatus httpStatus;
