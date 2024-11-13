@@ -16,7 +16,7 @@ public class MemberProfileService {
         this.memberProfileRepository = memberProfileRepository;
     }
 
-    public MemberProfileResponseDto getMemberProfile(Long memberId){
+    public MemberProfileResponseDto getMemberProfileById(Long memberId){
         Member member = memberProfileRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException("User not found"));
 

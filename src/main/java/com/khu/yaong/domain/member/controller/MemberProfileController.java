@@ -22,11 +22,12 @@ public class MemberProfileController {
         this.memberProfileService = memberProfileService;
     }
 
+
     @GetMapping("/me")
     public ResponseEntity<MemberProfileResponseDto> getMemberProfile(@AuthenticationPrincipal CustomUserDetails userDetails) {
         try {
             Long authenticatedMemberId = userDetails.getId();  // 인증된 사용자 ID 가져오기
-            MemberProfileResponseDto profile = memberProfileService.getMemberProfile(authenticatedMemberId);
+            MemberProfileResponseDto profile = memberProfileService.getMemberProfileById(authenticatedMemberId);
             return ResponseEntity.ok(profile);
         } catch (MemberNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);

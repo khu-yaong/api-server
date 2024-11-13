@@ -57,7 +57,7 @@ class MemberProfileServiceTest {
         when(memberProfileRepository.findById(memberId)).thenReturn(Optional.of(member));
 
         //when
-        MemberProfileResponseDto profileResponseDto = memberProfileService.getMemberProfile(memberId);
+        MemberProfileResponseDto profileResponseDto = memberProfileService.getMemberProfileById(memberId);
 
         // then
         assertNotNull(profileResponseDto);

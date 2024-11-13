@@ -76,7 +76,7 @@ class MemberProfileControllerTest {
                 .build();
 
         // when
-        when(memberProfileService.getMemberProfile(anyLong())).thenReturn(responseDto);
+        when(memberProfileService.getMemberProfileById(anyLong())).thenReturn(responseDto);
 
         // then
         mockMvc.perform(get("/users/me")
@@ -93,7 +93,7 @@ class MemberProfileControllerTest {
     @Test
     void testGetMemberProfile_NotFound() throws Exception {
         // when
-        when(memberProfileService.getMemberProfile(anyLong())).thenThrow(new MemberNotFoundException("Member not found"));
+        when(memberProfileService.getMemberProfileById(anyLong())).thenThrow(new MemberNotFoundException("Member not found"));
 
         // then
         mockMvc.perform(get("/users/me")
