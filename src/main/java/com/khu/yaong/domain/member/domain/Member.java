@@ -1,7 +1,7 @@
-
 package com.khu.yaong.domain.member.domain;
 
 import com.khu.yaong.domain.common.BaseTime;
+import com.khu.yaong.domain.diary.domain.Diary;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseTime {
 
@@ -46,4 +48,3 @@ public class Member extends BaseTime {
     }
 
 }
-
