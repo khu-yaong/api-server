@@ -3,7 +3,10 @@ package com.khu.yaong.domain.member.domain;
 import com.khu.yaong.domain.common.BaseTime;
 import com.khu.yaong.domain.diary.domain.Diary;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
