@@ -1,11 +1,10 @@
-package com.khu.yaong.global.common.response.member;
+package com.khu.yaong.domain.member.exception;
 
 import com.khu.yaong.global.common.type.SuccessResponse;
 import org.springframework.http.HttpStatus;
 
 public enum MemberSuccessCode implements SuccessResponse {
-    REGISTER_SUCCESS(HttpStatus.CREATED,"MEMBER_CREATED", "회원가입이 성공적으로 이루어졌습니다."),
-    LOGIN_SUCCESS(HttpStatus.OK,"LOGIN_SUCCESS", "로그인이 성공적으로 이루어졌습니다.");
+    INFO_SUCCESS(HttpStatus.OK,"MEMBER_INFO_SUCCESS","회원정보 조회에 성공했습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
