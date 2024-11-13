@@ -1,9 +1,9 @@
-package com.khu.yaong.global.common.response.member;
+package com.khu.yaong.domain.auth.exception;
 
 import com.khu.yaong.global.common.type.SuccessResponse;
 import org.springframework.http.HttpStatus;
 
-public enum MemberSuccessCode implements SuccessResponse {
+public enum AuthSuccessCode implements SuccessResponse {
     REGISTER_SUCCESS(HttpStatus.CREATED,"MEMBER_CREATED", "회원가입이 성공적으로 이루어졌습니다."),
     LOGIN_SUCCESS(HttpStatus.OK,"LOGIN_SUCCESS", "로그인이 성공적으로 이루어졌습니다.");
 
@@ -11,7 +11,7 @@ public enum MemberSuccessCode implements SuccessResponse {
     private final String code;
     private final String message;
 
-    MemberSuccessCode(HttpStatus httpStatus, String code, String message) {
+    AuthSuccessCode(HttpStatus httpStatus, String code, String message) {
         this.httpStatus = httpStatus;
         this.code = code;
         this.message = message;
