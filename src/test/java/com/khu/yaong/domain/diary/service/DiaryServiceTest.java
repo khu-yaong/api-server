@@ -7,7 +7,7 @@ import com.khu.yaong.domain.diary.exception.DiaryNotFoundException;
 import com.khu.yaong.domain.diary.repository.DiaryRepository;
 import com.khu.yaong.domain.member.domain.Member;
 import com.khu.yaong.domain.member.domain.Team;
-import com.khu.yaong.domain.post.repository.MemberRepository;
+import com.khu.yaong.domain.member.repository.MemberProfileRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -33,7 +33,7 @@ class DiaryServiceTest {
     private DiaryRepository diaryRepository;
 
     @Mock
-    private MemberRepository memberRepository;
+    private MemberProfileRepository memberRepository;
 
     private Member member;
     private Diary diary;

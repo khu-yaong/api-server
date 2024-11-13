@@ -1,7 +1,7 @@
 package com.khu.yaong.global.auth;
 
 import com.khu.yaong.domain.member.domain.Member;
-import com.khu.yaong.domain.post.repository.MemberRepository;
+import com.khu.yaong.domain.member.repository.MemberProfileRepository;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 @Getter
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final MemberRepository memberRepository;
+    private final MemberProfileRepository memberRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
