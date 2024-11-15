@@ -58,4 +58,17 @@ public class AuthService {
 
         }
     }
+
+
+    public Member createMemberByKakao(KakaoUserInfo kakaoUserInfo) {
+
+        return Member.builder()
+                .username(kakaoUserInfo.getNickname())
+                .email(kakaoUserInfo.getEmail())
+                .password(null)
+                .role(MemberRole.USER)
+                .team(null)
+                .profileImage(null)
+                .build();
+    }
 }

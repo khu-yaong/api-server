@@ -32,7 +32,7 @@ public class SecurityConfig{
                                 .requestMatchers("/h2/**").permitAll()
                                 .requestMatchers("/api/**","/error").permitAll()
                                 .requestMatchers("/api/member/info").hasRole("USER")
-                                //.requestMatchers("/**").permitAll()     // 임시
+                                .requestMatchers("/**").permitAll()     // 임시
                                 .requestMatchers("/login/**").permitAll()
                                 .requestMatchers("/api/users/login/**").permitAll()
                                 .anyRequest().authenticated()
