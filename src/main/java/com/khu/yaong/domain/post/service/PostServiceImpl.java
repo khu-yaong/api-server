@@ -5,9 +5,6 @@ import com.khu.yaong.domain.mapping.domain.MemberPostLike;
 import com.khu.yaong.domain.mapping.repository.MemberPostLikeRepository;
 import com.khu.yaong.domain.member.domain.Member;
 import com.khu.yaong.domain.member.domain.Team;
-import com.khu.yaong.domain.mapping.domain.MemberPostLike;
-import com.khu.yaong.domain.mapping.repository.MemberPostLikeRepository;
-import com.khu.yaong.domain.member.domain.Member;
 import com.khu.yaong.domain.member.repository.MemberRepository;
 import com.khu.yaong.domain.post.domain.Category;
 import com.khu.yaong.domain.post.domain.Post;
@@ -17,6 +14,7 @@ import com.khu.yaong.domain.post.repository.PostRepository;
 import com.khu.yaong.global.common.exception.BaseException;
 import com.khu.yaong.global.common.response.member.MemberErrorCode;
 import com.khu.yaong.global.common.response.post.PostErrorCode;
+import com.khu.yaong.global.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,8 +37,9 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostResDTO.PostDetailDTO createPost(PostReqDTO.PostDTO postDTO) {
 
-        // Authorization 구현 후 수정 예정
-        Member author = memberRepository.findById(1L)
+        // Authorization
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        Member author = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BaseException(MemberErrorCode.MEMBER_NOT_FOUND));
 
         Post post = Post.builder()
@@ -62,8 +61,9 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostResDTO.PostDetailDTO updatePost(Long postId, PostReqDTO.PostDTO postDTO) {
 
-        // Authorization 구현 후 수정 예정
-        Member member = memberRepository.findById(1L)
+        // Authorization
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BaseException(MemberErrorCode.MEMBER_NOT_FOUND));
 
         Post post = postRepository.findById(postId)
@@ -92,8 +92,9 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostResDTO.PostStatusDTO deletePost(Long postId) {
 
-        // Authorization 구현 후 수정 예정
-        Member member = memberRepository.findById(1L)
+        // Authorization
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BaseException(MemberErrorCode.MEMBER_NOT_FOUND));
 
         Post post = postRepository.findById(postId)
@@ -114,6 +115,12 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostResDTO.PostInfoDTO> getPosts(Category category, Team team, LocalDateTime cursorDateTime, Long cursorPostId, Integer pageSize) {
+
+        // Authorization
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        memberRepository.findById(memberId)
+                .orElseThrow(() -> new BaseException(MemberErrorCode.MEMBER_NOT_FOUND));
+
         return postRepository.findPostsByCategoryAndTeam(category, team, cursorDateTime, cursorPostId, pageSize).stream()
                 .map(PostResDTO.PostInfoDTO::toDTO)
                 .toList();
@@ -125,8 +132,9 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostResDTO.PostStatusDTO likePost(Long postId) {
 
-        // Authorization 구현 후 수정 예정
-        Member member = memberRepository.findById(1L)
+        // Authorization
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BaseException(MemberErrorCode.MEMBER_NOT_FOUND));
 
         Post post = postRepository.findById(postId)
@@ -153,8 +161,9 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostResDTO.PostStatusDTO cancelLikePost(Long postId) {
 
-        // Authorization 구현 후 수정 예정
-        Member member = memberRepository.findById(1L)
+        // Authorization
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BaseException(MemberErrorCode.MEMBER_NOT_FOUND));
 
         Post post = postRepository.findById(postId)

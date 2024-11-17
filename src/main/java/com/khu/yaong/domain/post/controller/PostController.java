@@ -18,7 +18,6 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
 @Tag(name = "Home API", description = "홈화면(게시글) 관련 API")
 public class PostController {
 

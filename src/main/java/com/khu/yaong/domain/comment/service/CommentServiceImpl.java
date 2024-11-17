@@ -12,6 +12,7 @@ import com.khu.yaong.global.common.exception.BaseException;
 import com.khu.yaong.global.common.response.comment.CommentErrorCode;
 import com.khu.yaong.global.common.response.member.MemberErrorCode;
 import com.khu.yaong.global.common.response.post.PostErrorCode;
+import com.khu.yaong.global.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,8 +29,9 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentResDTO.CommentDetailDTO createComment(Long postId, CommentReqDTO commentReqDTO) {
 
-        // Authorization 구현 후 수정 예정
-        Member author = memberRepository.findById(1L)
+        // Authorization
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        Member author = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BaseException(MemberErrorCode.MEMBER_NOT_FOUND));
 
         Post post = postRepository.findById(postId)
@@ -50,8 +52,9 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentResDTO.CommentDetailDTO deleteComment(Long commentId) {
 
-        // Authorization 구현 후 수정 예정
-        Member author = memberRepository.findById(1L)
+        // Authorization
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        Member author = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BaseException(MemberErrorCode.MEMBER_NOT_FOUND));
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new BaseException(CommentErrorCode.COMMENT_NOT_FOUND));
