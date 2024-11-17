@@ -2,12 +2,13 @@ package com.khu.yaong.domain.member.domain;
 
 import com.khu.yaong.domain.common.BaseTime;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
+@Setter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberLevel extends BaseTime {
 

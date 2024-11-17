@@ -14,9 +14,24 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI openAPI() {
+
+        String jwtSchemeName = "accessToken";
+        //String refreshToken = "refreshToken";
+
+        SecurityRequirement securityRequirement = new SecurityRequirement()
+                .addList(jwtSchemeName);
+
+        Components components = new Components()
+                .addSecuritySchemes(jwtSchemeName, new SecurityScheme()
+                        .type(SecurityScheme.Type.HTTP)
+                        .scheme("bearer")
+                        .bearerFormat("JWT"));
+
         return new OpenAPI()
                 .components(new Components())
-                .info(swaggerInfo());
+                .info(swaggerInfo())
+                .addSecurityItem(securityRequirement)
+                .components(components);
     }
 
 

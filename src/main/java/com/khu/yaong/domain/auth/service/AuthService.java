@@ -1,5 +1,4 @@
 package com.khu.yaong.domain.auth.service;
-
 import com.khu.yaong.domain.auth.domain.RefreshToken;
 import com.khu.yaong.domain.auth.dto.response.GoogleUserInfo;
 import com.khu.yaong.domain.auth.dto.response.KakaoUserInfo;

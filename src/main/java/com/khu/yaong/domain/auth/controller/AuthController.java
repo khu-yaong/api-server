@@ -24,7 +24,7 @@ public class AuthController {
 
     private final AuthService authService;
     private final KakaoOAuthService kakaoOAuthService;
-    private final GoogleOAuthService googleOAuthService;
+    //private final GoogleOAuthService googleOAuthService;
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<MemberRegisterResponseDto>> register(@RequestBody MemberRegisterRequestDto request) {
