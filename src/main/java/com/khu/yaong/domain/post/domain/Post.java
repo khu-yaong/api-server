@@ -40,9 +40,11 @@ public class Post extends BaseTime {
     @Column(name = "image_url")
     private String imageUrl;
 
+    @Builder.Default
     @Column(name = "count_like", nullable = false)
     private Long countLike = 0L;
 
+    @Builder.Default
     @Column(name = "count_comment", nullable = false)
     private Long countComment = 0L;
 
