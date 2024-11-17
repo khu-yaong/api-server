@@ -6,6 +6,7 @@ import com.khu.yaong.domain.auth.dto.response.MemberLoginResponseDto;
 import com.khu.yaong.domain.auth.dto.response.MemberRegisterResponseDto;
 import com.khu.yaong.domain.auth.exception.AuthSuccessCode;
 import com.khu.yaong.domain.auth.service.AuthService;
+import com.khu.yaong.domain.auth.service.KakaoOAuthService;
 import com.khu.yaong.global.common.response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class AuthController {
 
     private final AuthService authService;
     private final KakaoOAuthService kakaoOAuthService;
-    private final GoogleOAuthService googleOAuthService;
+    //private final GoogleOAuthService googleOAuthService;
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<MemberRegisterResponseDto>> register(@RequestBody MemberRegisterRequestDto request) {

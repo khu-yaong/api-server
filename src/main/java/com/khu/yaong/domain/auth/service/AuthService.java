@@ -1,5 +1,6 @@
 package com.khu.yaong.domain.auth.service;
 
+import com.khu.yaong.domain.auth.dto.response.KakaoUserInfo;
 import com.khu.yaong.domain.auth.exception.AuthErrorCode;
 import com.khu.yaong.domain.auth.exception.AuthException;
 import com.khu.yaong.domain.member.domain.Member;
@@ -7,6 +8,7 @@ import com.khu.yaong.domain.auth.dto.request.MemberLoginRequestDto;
 import com.khu.yaong.domain.auth.dto.request.MemberRegisterRequestDto;
 import com.khu.yaong.domain.auth.dto.response.MemberLoginResponseDto;
 import com.khu.yaong.domain.auth.dto.response.MemberRegisterResponseDto;
+import com.khu.yaong.domain.member.domain.MemberRole;
 import com.khu.yaong.domain.member.repository.MemberRepository;
 import com.khu.yaong.global.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
