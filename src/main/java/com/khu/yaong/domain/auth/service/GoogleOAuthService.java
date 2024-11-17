@@ -1,7 +1,7 @@
 package com.khu.yaong.domain.auth.service;
 
-import com.khu.yaong.domain.auth.dto.response.KakaoTokenResponse;
-import com.khu.yaong.domain.auth.dto.response.KakaoUserInfo;
+import com.khu.yaong.domain.auth.dto.response.GoogleTokenResponse;
+import com.khu.yaong.domain.auth.dto.response.GoogleUserInfo;
 import com.khu.yaong.domain.auth.dto.response.MemberLoginResponseDto;
 import com.khu.yaong.domain.member.domain.Member;
 import com.khu.yaong.domain.member.repository.MemberRepository;
@@ -22,32 +22,35 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-public class KakaoOAuthService {
+public class GoogleOAuthService {
 
     private final AuthService authService;
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
-    @Value("${kakao.client-id}")
+    @Value("${google.client-id}")
     private String clientId;
 
-    @Value("${kakao.redirect-uri}")
+    @Value("${google.client-secret}")
+    private String clientSecret;
+
+    @Value("${google.redirect-uri}")
     private String redirectUri;
 
-    @Value("${kakao.token-uri}")
+    @Value("${google.token-uri}")
     private String tokenUri;
 
-    @Value("${kakao.user-info-uri}")
-    private String userinfoUri;
+    @Value("${google.user-info-uri}")
+    private String userInfoUri;
 
-    public MemberLoginResponseDto loginKakao(String authorizationCode) {
+    public MemberLoginResponseDto loginGoogle(String authorizationCode) {
         String accessToken = getAccessToken(authorizationCode);
-        KakaoUserInfo kakaoUserInfo = getUserInfo(accessToken);
+        GoogleUserInfo googleUserInfo = getUserInfo(accessToken);
 
-        Member member = authService.createMemberByKakao(kakaoUserInfo);
+        Member member = authService.createMemberByGoogle(googleUserInfo);
         Optional<Member> savedMember = Optional.of(memberRepository.save(member));
 
-        String token = jwtTokenProvider.createAccessToken(savedMember.get().getId(),savedMember.get().getRole());
+        String token = jwtTokenProvider.createAccessToken(savedMember.get().getId(), savedMember.get().getRole());
         String refreshToken = jwtTokenProvider.createRefreshToken(savedMember.get().getId(),savedMember.get().getRole());
         return new MemberLoginResponseDto(token, refreshToken,savedMember.get().getId(), savedMember.get().getUsername(), savedMember.get().getRole(), savedMember.get().getProfileImage());
     }
@@ -58,15 +61,16 @@ public class KakaoOAuthService {
         String requestUrl = UriComponentsBuilder.fromHttpUrl(tokenUri)
                 .queryParam("grant_type", "authorization_code")
                 .queryParam("client_id", clientId)
+                .queryParam("client_secret", clientSecret)
                 .queryParam("redirect_uri", redirectUri)
                 .queryParam("code", authorizationCode)
                 .toUriString();
 
-        KakaoTokenResponse response = restTemplate.postForObject(requestUrl, null, KakaoTokenResponse.class);
+        GoogleTokenResponse response = restTemplate.postForObject(requestUrl, null, GoogleTokenResponse.class);
         return response != null ? response.getAccessToken() : null;
     }
 
-    public KakaoUserInfo getUserInfo(String accessToken) {
+    public GoogleUserInfo getUserInfo(String accessToken) {
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
@@ -74,21 +78,16 @@ public class KakaoOAuthService {
 
         HttpEntity<String> entity = new HttpEntity<>(headers);
         ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
-                userinfoUri,
+                userInfoUri,
                 HttpMethod.GET,
                 entity,
                 new ParameterizedTypeReference<Map<String, Object>>() {}
         );
 
         Map<String, Object> responseBody = response.getBody();
-        Map<String, Object> kakaoAccount = (Map<String, Object>) responseBody.get("kakao_account");
-        Map<String, Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
+        String name = (String) responseBody.get("name");
+        String email = (String) responseBody.get("email");
 
-        String nickname = (String) profile.get("nickname");
-        String email = (String) kakaoAccount.get("email");
-
-        return new KakaoUserInfo(nickname, email);
-
-
+        return new GoogleUserInfo(name, email);
     }
 }

@@ -1,6 +1,8 @@
 package com.khu.yaong.global.security.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.khu.yaong.domain.auth.exception.AuthErrorCode;
+import com.khu.yaong.domain.auth.exception.AuthException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
@@ -27,7 +29,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     private static final List<String> EXCLUDE_URLS = Arrays.asList(
-            "/swagger-ui", "/v3/api-docs", "/h2", "/api/auth/register","/api/auth/login","/login"
+            "/swagger-ui", "/v3/api-docs", "/h2", "/api/auth/register","/api/auth/login","/login","/login/oauth2/code/kakao&response_type=code","/api/auth/refresh"
     );
 
 
@@ -45,28 +47,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = resolveToken(httpServletRequest);
         log.info("BearerToken: {}", token);
 
-        try{
-            if (token != null && jwtTokenProvider.isValidToken(token)){
+        try {
+            if (token != null && jwtTokenProvider.isValidToken(token)) {
                 var authentication = jwtTokenProvider.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 log.info("Authentication set in SecurityContext.");
-                System.out.println(authentication);
             } else {
-                setErrorResponse(httpServletResponse, HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다.");
-                return;
+                throw new AuthException(AuthErrorCode.INVALID_REFRESH_TOKEN);
             }
             filterChain.doFilter(httpServletRequest, httpServletResponse);
         } catch (ExpiredJwtException e) {
-            setErrorResponse(httpServletResponse,HttpStatus.UNAUTHORIZED,"토큰이 만료되었습니다.");
+            throw new AuthException(AuthErrorCode.TOKEN_EXPIRED);
         } catch (UnsupportedJwtException | MalformedJwtException e) {
-            setErrorResponse(httpServletResponse, HttpStatus.BAD_REQUEST, "유효하지 않은 토큰 형식입니다.");
+            throw new AuthException(AuthErrorCode.INVALID_TOKEN_FORMAT);
         } catch (Exception e) {
-            setErrorResponse(httpServletResponse, HttpStatus.INTERNAL_SERVER_ERROR, "서버 오류가 발생했습니다.");
+            throw new AuthException(AuthErrorCode.SERVER_ERROR);
         }
-        }
+    }
 
     private void setErrorResponse(HttpServletResponse response, HttpStatus status, String message) throws IOException {
-        response.setStatus(status.value()); // HTTP 상태 코드 설정
+        response.setStatus(status.value());
         response.setContentType("application/json;charset=UTF-8");
 
         Map<String, Object> errorResponse = new HashMap<>();
