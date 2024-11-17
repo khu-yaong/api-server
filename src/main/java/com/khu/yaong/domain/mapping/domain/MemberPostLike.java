@@ -1,6 +1,5 @@
-package com.khu.yaong.domain.comment.domain;
+package com.khu.yaong.domain.mapping.domain;
 
-import com.khu.yaong.domain.common.BaseTime;
 import com.khu.yaong.domain.member.domain.Member;
 import com.khu.yaong.domain.post.domain.Post;
 import jakarta.persistence.*;
@@ -11,22 +10,20 @@ import lombok.*;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Comment extends BaseTime {
+public class MemberPostLike {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "comment_id")
-    private Long id; // 댓글 ID
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
-    private Member author;
+    @Column(nullable = false)
+    private Long id;
 
     @Setter
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id", nullable = false)
-    private Post post;
+    @JoinColumn(name = "member_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private Member member;
 
-    @Column(nullable = false)
-    private String content;
+    @Setter
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private Post post;
 }
