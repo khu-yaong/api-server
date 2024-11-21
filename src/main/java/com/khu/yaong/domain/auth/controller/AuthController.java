@@ -1,7 +1,11 @@
 package com.khu.yaong.domain.auth.controller;
 
+import com.khu.yaong.domain.auth.dto.request.MemberEmailRequestDto;
+import com.khu.yaong.domain.auth.dto.request.MemberEmailVerifyRequestDto;
 import com.khu.yaong.domain.auth.dto.request.MemberLoginRequestDto;
 import com.khu.yaong.domain.auth.dto.request.MemberRegisterRequestDto;
+import com.khu.yaong.domain.auth.dto.response.MemberEmailResponseDto;
+import com.khu.yaong.domain.auth.dto.response.MemberEmailVerifyResponseDto;
 import com.khu.yaong.domain.auth.dto.response.MemberLoginResponseDto;
 import com.khu.yaong.domain.auth.dto.response.MemberRegisterResponseDto;
 import com.khu.yaong.domain.auth.exception.AuthSuccessCode;
@@ -18,7 +22,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
-//@RequestMapping
 @RequiredArgsConstructor
 public class AuthController {
 
@@ -58,6 +61,19 @@ public class AuthController {
         String authorizationCode = requestBody.get("authorizationCode");
         MemberLoginResponseDto response = googleOAuthService.loginGoogle(authorizationCode);
         return new ResponseEntity<>(ApiResponse.success(AuthSuccessCode.LOGIN_SUCCESS, response), HttpStatus.OK);
+    }
+
+    @PostMapping("/sendEmail")
+    public ResponseEntity<ApiResponse<MemberEmailResponseDto>> sendEmail(@RequestBody MemberEmailRequestDto requestDto) {
+        MemberEmailResponseDto response = authService.sendCodeToEmail(requestDto.getEmail());
+        return new ResponseEntity<>(ApiResponse.success(AuthSuccessCode.SEND_EMAIL_SUCCESS, response), HttpStatus.OK);
+
+    }
+    @PostMapping("/verifyEmail")
+    public ResponseEntity<ApiResponse<MemberEmailVerifyResponseDto>> verifyEmail(@RequestBody MemberEmailVerifyRequestDto requestDto) {
+        MemberEmailVerifyResponseDto response = authService.verifyEmailCode(requestDto.getEmail(), requestDto.getCode());
+        return new ResponseEntity<>(ApiResponse.success(AuthSuccessCode.VERIFY_EMAIL_SUCCESS, response), HttpStatus.OK);
+
     }
 
 }
