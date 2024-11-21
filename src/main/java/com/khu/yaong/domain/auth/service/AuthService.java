@@ -1,21 +1,20 @@
 package com.khu.yaong.domain.auth.service;
-import com.khu.yaong.domain.auth.domain.RefreshToken;
-import com.khu.yaong.domain.auth.dto.response.GoogleUserInfo;
-import com.khu.yaong.domain.auth.dto.response.KakaoUserInfo;
+import com.khu.yaong.domain.auth.domain.EmailVerification;
+import com.khu.yaong.domain.auth.dto.response.*;
 import com.khu.yaong.domain.auth.exception.AuthErrorCode;
 import com.khu.yaong.domain.auth.exception.AuthException;
-import com.khu.yaong.domain.auth.respository.RefreshTokenRepository;
+import com.khu.yaong.domain.auth.respository.EmailCodeRepository;
 import com.khu.yaong.domain.member.domain.Member;
 import com.khu.yaong.domain.auth.dto.request.MemberLoginRequestDto;
 import com.khu.yaong.domain.auth.dto.request.MemberRegisterRequestDto;
-import com.khu.yaong.domain.auth.dto.response.MemberLoginResponseDto;
-import com.khu.yaong.domain.auth.dto.response.MemberRegisterResponseDto;
 import com.khu.yaong.domain.member.domain.MemberRole;
 import com.khu.yaong.domain.member.repository.MemberRepository;
 import com.khu.yaong.global.security.jwt.JwtTokenProvider;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -24,6 +23,8 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenService refreshTokenService;
+    private final EmailService emailService;
+    private final EmailCodeRepository emailCodeRepository;
 
     public boolean existsByEmail(String email) {
         return memberRepository.existsByEmail(email);
@@ -109,9 +110,27 @@ public class AuthService {
         memberRepository.deleteById(memberId);
         refreshTokenService.deleteRefreshToken(memberId);
 
+    }
+
+    public MemberEmailResponseDto sendCodeToEmail(String email) {
+        String code = generateVerificationCode();
+        emailService.sendCode(email, "[YAONG] 이메일 인증코드", "인증코드 : " + code);
+        saveVerificationCode(email, code);
+
+        return new MemberEmailResponseDto(email, "인증코드가 발송되었습니다.");
+    }
+
     private String generateVerificationCode() {
         return String.valueOf((int) ((Math.random() * 900000) + 100000));   // 6자리 랜덤 숫자
     }
 
+    public void saveVerificationCode(String email, String code){
+        EmailVerification emailVerification = new EmailVerification();
+        emailVerification.setEmail(email);
+        emailVerification.setCode(code);
+        emailVerification.setExpirationTime(LocalDateTime.now());
+        emailCodeRepository.save(emailVerification);
+        System.out.println(emailVerification);
+        System.out.println(emailCodeRepository.findByEmail(email));
     }
 }
