@@ -100,4 +100,14 @@ public class AuthService {
                 .profileImage(null)
                 .build();
     }
+
+    @Transactional
+    public void withdraw(String accessToken){
+        Long memberId = jwtTokenProvider.getMemberIdFromToken(accessToken);
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new AuthException(AuthErrorCode.MEMBER_NOT_FOUND));
+        memberRepository.deleteById(memberId);
+        refreshTokenService.deleteRefreshToken(memberId);
+
+    }
 }

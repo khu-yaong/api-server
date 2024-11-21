@@ -1,17 +1,12 @@
 package com.khu.yaong.domain.diary.controller;
 
-import com.khu.yaong.domain.diary.domain.Diary;
 import com.khu.yaong.domain.diary.dto.DiaryRequestDto;
 import com.khu.yaong.domain.diary.dto.DiaryResponseDto;
 import com.khu.yaong.domain.diary.service.DiaryService;
-import com.khu.yaong.domain.member.domain.Member;
-import com.khu.yaong.domain.member.service.MemberProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -20,7 +15,6 @@ import java.util.List;
 public class DiaryController {
 
     private final DiaryService diaryService;
-    private final MemberProfileService memberProfileService;
 
     // 야구 관람 일지 생성
     @PostMapping("/game_diaries")

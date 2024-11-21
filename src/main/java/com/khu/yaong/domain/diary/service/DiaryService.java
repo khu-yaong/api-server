@@ -6,7 +6,7 @@ import com.khu.yaong.domain.diary.dto.DiaryResponseDto;
 import com.khu.yaong.domain.diary.exception.DiaryNotFoundException;
 import com.khu.yaong.domain.diary.repository.DiaryRepository;
 import com.khu.yaong.domain.member.domain.Member;
-import com.khu.yaong.domain.member.repository.MemberProfileRepository;
+import com.khu.yaong.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @Service
 public class DiaryService {
     private final DiaryRepository diaryRepository;
-    private final MemberProfileRepository memberRepository;
+    private final MemberRepository memberRepository;
 
 
     // 관람 일지 생성
