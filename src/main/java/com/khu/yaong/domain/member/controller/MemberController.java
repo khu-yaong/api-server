@@ -37,4 +37,15 @@ public class MemberController {
         MemberProfileResponseDto profile = memberService.getMemberProfileById(Long.valueOf(authenticatedMemberId));
         return ResponseEntity.ok(ApiResponse.success(MemberSuccessCode.INFO_SUCCESS, profile));
     }
+
+
+    // 회원정보 수정
+
+    // 회원탈퇴
+    @PostMapping("/withdraw")
+    public ResponseEntity<ApiResponse<Void>> withdrawMember(@RequestHeader("Authorization") String accessToken) {
+        String token = accessToken.replace("Bearer ", "");
+        authService.withdraw(token);
+        return ResponseEntity.ok(ApiResponse.success(MemberSuccessCode.WITHDRAW_SUCCESS));
+    }
 }
