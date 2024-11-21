@@ -120,6 +120,26 @@ public class AuthService {
         return new MemberEmailResponseDto(email, "인증코드가 발송되었습니다.");
     }
 
+    @Transactional
+    public MemberEmailVerifyResponseDto verifyEmailCode(String email, String code) {
+        Optional<EmailVerification> emailVerification = emailCodeRepository.findByEmail(email);
+        String savedCode = emailVerification.isPresent() ? emailVerification.get().getCode() : null;
+
+        if (savedCode == null) {
+            throw new AuthException(AuthErrorCode.EMAIL_CODE_NOT_FOUND);
+        }
+
+        if (!savedCode.equals(code)) {
+            throw new AuthException(AuthErrorCode.EMAIL_CODE_MISMATCH);
+        }
+        /*if (isCodeExpired(email)) {
+            throw new AuthException(AuthErrorCode.EMAIL_CODE_EXPIRED);
+        }*/
+        emailCodeRepository.deleteByEmail(email);
+        return new MemberEmailVerifyResponseDto(email, true);
+
+    }
+
     private String generateVerificationCode() {
         return String.valueOf((int) ((Math.random() * 900000) + 100000));   // 6자리 랜덤 숫자
     }
