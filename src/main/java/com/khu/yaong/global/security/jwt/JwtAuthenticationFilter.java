@@ -29,7 +29,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     private static final List<String> EXCLUDE_URLS = Arrays.asList(
-            "/swagger-ui", "/v3/api-docs", "/h2", "/api/auth/register","/api/auth/login","/login","/login/oauth2/code/kakao&response_type=code","/api/auth/refresh"
+            "/swagger-ui", "/v3/api-docs", "/h2", "/api/auth/register","/api/auth/login","/login","/login/oauth2/code/kakao&response_type=code","/api/auth/refresh","/api/auth/sendEmail","/api/auth/verifyEmail"
     );
 
 
@@ -50,12 +50,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             if (token != null && jwtTokenProvider.isValidToken(token)) {
                 var authentication = jwtTokenProvider.getAuthentication(token);
+                log.info("Generated Authentication: {}", authentication);
+                log.info("Authentication Principal: {}", authentication.getPrincipal());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                log.info("Authentication set in SecurityContext.");
+                log.info("Principal Type: {}", authentication.getPrincipal().getClass());
+                log.info("Authentication Principal: {}", authentication.getPrincipal());
             } else {
                 throw new AuthException(AuthErrorCode.INVALID_REFRESH_TOKEN);
             }
+
+            log.info("Before filterChain.doFilter: Authentication = {}", SecurityContextHolder.getContext().getAuthentication());
             filterChain.doFilter(httpServletRequest, httpServletResponse);
+            log.info("After filterChain.doFilter: Authentication = {}", SecurityContextHolder.getContext().getAuthentication());
         } catch (ExpiredJwtException e) {
             throw new AuthException(AuthErrorCode.TOKEN_EXPIRED);
         } catch (UnsupportedJwtException | MalformedJwtException e) {
