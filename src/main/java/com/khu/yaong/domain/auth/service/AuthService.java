@@ -109,5 +109,9 @@ public class AuthService {
         memberRepository.deleteById(memberId);
         refreshTokenService.deleteRefreshToken(memberId);
 
+    private String generateVerificationCode() {
+        return String.valueOf((int) ((Math.random() * 900000) + 100000));   // 6자리 랜덤 숫자
+    }
+
     }
 }
