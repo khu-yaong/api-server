@@ -4,8 +4,8 @@ import com.khu.yaong.global.common.type.SuccessResponse;
 import org.springframework.http.HttpStatus;
 
 public enum MemberSuccessCode implements SuccessResponse {
-    INFO_SUCCESS(HttpStatus.OK,"MEMBER_INFO_SUCCESS","회원정보 조회에 성공했습니다.");
     INFO_SUCCESS(HttpStatus.OK,"MEMBER_200","회원정보 조회에 성공했습니다."),
+    WITHDRAW_SUCCESS(HttpStatus.OK,"MEMBER_201", "회원 탈퇴가 완료되었습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
