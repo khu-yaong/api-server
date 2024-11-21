@@ -1,4 +1,4 @@
-package com.khu.yaong.domain.member.dto;
+package com.khu.yaong.domain.member.dto.response;
 
 import com.khu.yaong.domain.member.domain.Team;
 import lombok.Builder;
