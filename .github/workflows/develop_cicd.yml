@@ -31,7 +31,6 @@ jobs:
         run: |
           chmod +x ./gradlew
           ./gradlew clean build -x test
-          chmod +x ./gradlew
 
       # Dcoker Hub 로그인
       - name: Docker Login
@@ -47,14 +46,18 @@ jobs:
       - name: Push Docker Image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/yaong:latest
 
+
       # EC2에 배포
       - name: Deploy to EC2
-        run: |
-          ssh -i ${{ secrets.SSH_PRIVATE_KEY }} ec2-user@${{ secrets.EC2_PUBLIC_IP }} << EOF
-          docker pull ${{ secrets.DOCKER_USERNAME }}/yaong:latest
-          docker stop yaong || true
-          docker rm yaong || true
-          docker run -d -p 8080:8080 --name yaong ${{ secrets.DOCKER_USERNAME }}/yaong:latest
-          EOF
-
-
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_PUBLIC_IP }}
+          username: ec2-user
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            sudo docker ps
+            sudo docker stop yaong || true
+            sudo docker rm yaong || true
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/yaong:latest
+            sudo docker run -d -p 8080:8080 --name yaong ${{ secrets.DOCKER_USERNAME }}/yaong:latest
+            sudo docker image prune -f
