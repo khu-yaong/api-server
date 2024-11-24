@@ -21,6 +21,7 @@ jobs:
       # application.yaml 생성
       - name: Create application.yaml
         run: |
+          mkdir -p src/main/resources
           echo "${{ secrets.APPLICATION_YAML }}" > src/main/resources/application.yaml
           echo "${{ secrets.APPLICATION_AUTH_YAML }}" > src/main/resources/application-auth.yaml
           echo "${{ secrets.APPLICATION_DEV_YAML }}" > src/main/resources/application-dev.yaml
