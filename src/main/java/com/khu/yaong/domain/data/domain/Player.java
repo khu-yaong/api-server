@@ -1,5 +1,6 @@
 package com.khu.yaong.domain.data.domain;
 
+import com.khu.yaong.domain.data.dto.Team;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,6 +18,10 @@ public class Player {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
     private Long id;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 5)
+    private Team team;
 
     @Column(length = 10)
     private String name;
