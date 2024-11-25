@@ -56,6 +56,10 @@ dependencies {
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
 	// mail
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
+	// apache common csv
+	implementation 'org.apache.commons:commons-csv:1.8'
+	// aws
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
 
 }
