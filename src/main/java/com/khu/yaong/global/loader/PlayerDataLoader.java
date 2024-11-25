@@ -7,7 +7,6 @@ import com.khu.yaong.domain.data.dto.PlayerDTO;
 import com.khu.yaong.domain.data.repository.FielderRepository;
 import com.khu.yaong.domain.data.repository.PitcherRepository;
 import com.khu.yaong.domain.data.repository.PlayerRepository;
-import com.khu.yaong.domain.data.service.S3FileService;
 import com.khu.yaong.global.common.exception.BaseException;
 import com.khu.yaong.global.common.response.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -28,13 +27,12 @@ public class PlayerDataLoader implements CommandLineRunner {
     private final PlayerRepository playerRepository;
     private final PitcherRepository pitcherRepository;
     private final FielderRepository fielderRepository;
-    private final S3FileService s3FileService;
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         // 선수 데이터가 db에 저장되어 있지 않으면 S3에서 csv 파일을 가져와 로드
+        String path = "data/player_raw_data.csv";
         if (playerRepository.count() == 0) {
-            String path = s3FileService.getFile("data/player_raw_data.csv");
             savePlayerData(path);
         }
     }
@@ -42,9 +40,8 @@ public class PlayerDataLoader implements CommandLineRunner {
     private void savePlayerData(String filePath) {
 
         try (InputStreamReader reader = new InputStreamReader(new ClassPathResource(filePath).getInputStream())) {
-            CSVParser csvParser = new CSVParser(reader, CSVFormat.TDF.withFirstRecordAsHeader().withTrim());
+            CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader().withTrim());
 
-            // CSV 파일의 각 레코드를 읽어와 Region 객체로 변환합니다.
             for (CSVRecord csvRecord : csvParser) {
                 PlayerDTO playerDTO = PlayerDTO.builder()
                         .avg(csvRecord.get("avg"))
@@ -77,10 +74,10 @@ public class PlayerDataLoader implements CommandLineRunner {
                 Player savedPlayer = playerRepository.save(player);
                 if (player.getPosition().equals("투수")) {
                     Pitcher pitcher = playerDTO.toPitcher(savedPlayer);
-                    Pitcher savedPitcher = pitcherRepository.save(pitcher);
+                    pitcherRepository.save(pitcher);
                 } else {
                     Fielder fielder = playerDTO.toFielder(savedPlayer);
-                    Fielder savedFielder = fielderRepository.save(fielder);
+                    fielderRepository.save(fielder);
                 }
             }
         } catch (IOException e) {

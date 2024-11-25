@@ -39,52 +39,56 @@ public class PlayerDTO {
     private final String whip;
 
     public Player toPlayer() {
-        try {
-            return Player.builder()
-                    .name(name)
-                    .no(Integer.valueOf(no))
-                    .position(position)
-                    .birth(LocalDate.parse(birth))
-                    .hwSpec(hw)
-                    .build();
-        } catch(NumberFormatException e) {
-            return null;
-        }
+        return Player.builder()
+                .name(name)
+                .no(toInteger(no))
+                .position(position)
+                .birth(LocalDate.parse(birth))
+                .hwSpec(hw)
+                .build();
     }
 
     public Pitcher toPitcher(Player player) {
+        return Pitcher.builder()
+                .era(toDouble(era))
+                .win(toInteger(w))
+                .lose(toInteger(l))
+                .sv(toInteger(sv))
+                .hld(toInteger(hld))
+                .ip(ip)
+                .so(toInteger(so))
+                .ha(toInteger(ha))
+                .hra(toInteger(hr))
+                .player(player)
+                .build();
+    }
+
+    public Fielder toFielder(Player player) {
+        return Fielder.builder()
+                .avg(toDouble(avg))
+                .hr(toInteger(hr))
+                .h(toInteger(h))
+                .r(toInteger(r))
+                .rbi(toInteger(rbi))
+                .sb(toInteger(sb))
+                .obp(toDouble(obp))
+                .ops(toDouble(ops))
+                .player(player)
+                .build();
+    }
+
+    private Integer toInteger(String value) {
         try {
-            return Pitcher.builder()
-                    .era(Double.valueOf(era))
-                    .win(Integer.valueOf(w))
-                    .lose(Integer.valueOf(l))
-                    .sv(Integer.valueOf(sv))
-                    .hld(Integer.valueOf(hld))
-                    .ip(ip)
-                    .so(Integer.valueOf(so))
-                    .ha(Integer.valueOf(ha))
-                    .hra(Integer.valueOf(hr))
-                    .player(player)
-                    .build();
-        } catch(NumberFormatException e) {
+            return value != null ? Integer.valueOf(value) : null;
+        } catch (NumberFormatException e) {
             return null;
         }
     }
 
-    public Fielder toFielder(Player player) {
+    private Double toDouble(String value) {
         try {
-            return Fielder.builder()
-                    .avg(Double.valueOf(avg))
-                    .hr(Integer.valueOf(hr))
-                    .h(Integer.valueOf(h))
-                    .r(Integer.valueOf(r))
-                    .rbi(Integer.valueOf(rbi))
-                    .sb(Integer.valueOf(sb))
-                    .obp(Double.valueOf(obp))
-                    .ops(Double.valueOf(ops))
-                    .player(player)
-                    .build();
-        } catch(NumberFormatException e) {
+            return value != null ? Double.valueOf(value) : null;
+        } catch (NumberFormatException e) {
             return null;
         }
     }
