@@ -30,7 +30,7 @@ public class PlayerDataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        // 선수 데이터가 db에 저장되어 있지 않으면 S3에서 csv 파일을 가져와 로드
+        // 선수 데이터가 db에 저장되어 있지 않으면 csv 파일에서 로드
         String path = "data/player_raw_data.csv";
         if (playerRepository.count() == 0) {
             savePlayerData(path);
@@ -42,7 +42,7 @@ public class PlayerDataLoader implements CommandLineRunner {
         try (InputStreamReader reader = new InputStreamReader(new ClassPathResource(filePath).getInputStream())) {
             CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader().withTrim());
 
-            for (CSVRecord csvRecord : csvParser) {
+            for (final CSVRecord csvRecord : csvParser) {
                 PlayerDTO playerDTO = PlayerDTO.builder()
                         .avg(csvRecord.get("avg"))
                         .bb(csvRecord.get("bb"))
