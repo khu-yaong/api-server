@@ -40,6 +40,7 @@ public class PlayerDTO {
 
     public Player toPlayer() {
         return Player.builder()
+                .team(Team.toEnum(team))
                 .name(name)
                 .no(toInteger(no))
                 .position(position)
