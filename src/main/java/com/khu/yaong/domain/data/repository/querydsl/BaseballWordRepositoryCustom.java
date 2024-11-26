@@ -1,4 +1,4 @@
-package com.khu.yaong.domain.data.repository;
+package com.khu.yaong.domain.data.repository.querydsl;
 
 import com.khu.yaong.domain.data.domain.BaseballWord;
 
