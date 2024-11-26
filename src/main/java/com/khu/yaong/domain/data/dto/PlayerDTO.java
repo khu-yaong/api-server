@@ -61,6 +61,8 @@ public class PlayerDTO {
                 .so(toInteger(so))
                 .ha(toInteger(ha))
                 .hra(toInteger(hr))
+                .bb(toInteger(bb))
+                .whip(toDouble(whip))
                 .player(player)
                 .build();
     }

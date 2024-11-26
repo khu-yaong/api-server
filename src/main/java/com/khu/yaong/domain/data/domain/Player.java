@@ -37,9 +37,11 @@ public class Player {
     @Column(length = 30)
     private String hwSpec;
 
+    @Setter
     @OneToOne(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true)
     private Pitcher pitcher = null;
 
+    @Setter
     @OneToOne(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true)
     private Fielder fielder = null;
 }

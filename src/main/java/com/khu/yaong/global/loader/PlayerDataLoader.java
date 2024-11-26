@@ -75,9 +75,11 @@ public class PlayerDataLoader implements CommandLineRunner {
                 if (player.getPosition().equals("투수")) {
                     Pitcher pitcher = playerDTO.toPitcher(savedPlayer);
                     pitcherRepository.save(pitcher);
+                    savedPlayer.setPitcher(pitcher);
                 } else {
                     Fielder fielder = playerDTO.toFielder(savedPlayer);
                     fielderRepository.save(fielder);
+                    savedPlayer.setFielder(fielder);
                 }
             }
         } catch (IOException e) {
