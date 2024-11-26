@@ -16,7 +16,7 @@ public class Pitcher {
     private Long id;
 
     @Column
-    private Double era;     // 평균자책점
+    private Double era;      // 평균자책점
 
     @Column
     private Integer win;     // 승
@@ -31,7 +31,7 @@ public class Pitcher {
     private Integer hld;     // 홀드
 
     @Column
-    private String ip;      // 이닝
+    private String ip;       // 이닝
 
     @Column
     private Integer so;      // 삼진
@@ -41,6 +41,12 @@ public class Pitcher {
 
     @Column
     private Integer hra;     // 피홈런
+
+    @Column
+    private Integer bb;      // 볼넷
+
+    @Column
+    private Double whip;     // whip
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "player_id", nullable = false)
