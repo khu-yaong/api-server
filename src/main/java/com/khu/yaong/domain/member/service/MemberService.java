@@ -23,7 +23,6 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
 
-    @Transactional
     public MemberProfileResponseDto getMemberProfileById(Long memberId){
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
@@ -42,7 +41,6 @@ public class MemberService {
     }
 
     // member 프로필 수정
-    @Transactional
     public void updateMemberProfile(Long memberId, MemberProfileReqDto updateDto){
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NoSuchElementException("Member not found with ID: " + memberId));
