@@ -40,4 +40,15 @@ public class PlayerController {
         List<PlayerResDTO.PlayerInfoDTO> playerInfoDTOS = playerService.getPlayers(pageSize, cursorId, cursorName, team, query);
         return ApiResponse.success(DataSuccessCode.PLAYER_LIST_FOUND, playerInfoDTOS);
     }
+
+    @Operation(summary = "[구현완료] 야구 선수 정보 조회", description = """
+    ## 야구 선수 정보를 조회합니다.
+    ### Return Data : 선수 기본 정보, pitcherRecord(야수면 null), fielderRecord(투수면 null)
+    * playerId : 선수 아이디 (not pitcherId, fielderId)
+    """)
+    @GetMapping("/players/{playerId}")
+    ApiResponse<PlayerResDTO.PlayerDetailDTO> getPlayerInfo(@RequestParam Long playerId) {
+        PlayerResDTO.PlayerDetailDTO playerDetailDTO = playerService.getPlayerInfo(playerId);
+        return ApiResponse.success(DataSuccessCode.PLAYER_FOUND, playerDetailDTO);
+    }
 }

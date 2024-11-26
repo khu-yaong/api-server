@@ -8,4 +8,6 @@ import java.util.List;
 public interface PlayerService {
 
     List<PlayerResDTO.PlayerInfoDTO> getPlayers(Integer pageSize, Long cursorId, String cursorName, Team team, String query);
+
+    PlayerResDTO.PlayerDetailDTO getPlayerInfo(Long playerId);
 }
