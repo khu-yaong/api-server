@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "Word API", description = "야구 용어 사전 API")
+@Tag(name = "Dictionary API", description = "야구 사전 API")
 public class WordController {
 
     private final WordService wordService;
