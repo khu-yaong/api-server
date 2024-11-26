@@ -5,6 +5,7 @@ import com.khu.yaong.domain.data.service.PlayerService;
 import com.khu.yaong.domain.member.domain.Team;
 import com.khu.yaong.global.common.response.ApiResponse;
 import com.khu.yaong.global.common.response.data.DataSuccessCode;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,14 @@ public class PlayerController {
 
     private final PlayerService playerService;
 
+    @Operation(summary = "[구현완료] 야구 선수 목록 조회", description = """
+    ## 야구 선수 목록을 조회합니다.
+    * pageSize : 페이지 사이즈 (1 이상)
+    * cursorId(nullable) : 이전 페이지의 가장 마지막 야구 선수 id (정수값)
+    * cursorName(nullable) : 이전 페이지의 가장 마지막 야구 선수 이름
+    * team(nullable) : 구단명
+    * query(nullable) : 입력한 검색어 (검색어가 없으면 가나다순으로 야구 선수 목록 조회)
+    """)
     @GetMapping("/players")
     ApiResponse<List<PlayerResDTO.PlayerInfoDTO>> getPlayers(
             @RequestParam Integer pageSize,
