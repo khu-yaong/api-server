@@ -1,11 +1,10 @@
 package com.khu.yaong.domain.data.domain;
 
-import com.khu.yaong.domain.data.dto.Team;
+import com.khu.yaong.domain.member.domain.Team;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter

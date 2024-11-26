@@ -3,7 +3,7 @@ package com.khu.yaong.domain.data.controller;
 import com.khu.yaong.domain.data.dto.WordResDTO;
 import com.khu.yaong.domain.data.service.WordService;
 import com.khu.yaong.global.common.response.ApiResponse;
-import com.khu.yaong.global.common.response.data.WordSuccessCode;
+import com.khu.yaong.global.common.response.data.DataSuccessCode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +30,9 @@ public class WordController {
     ApiResponse<List<WordResDTO.WordDescriptionDTO>> getBaseballWords(
             @RequestParam Integer pageSize,
             @RequestParam(required = false) String cursorWord,
-            @RequestParam(required = false) String query) {
+            @RequestParam(required = false) String query
+    ) {
         List<WordResDTO.WordDescriptionDTO> wordDescriptionDTOS = wordService.getBaseballWords(pageSize, cursorWord, query);
-        return ApiResponse.success(WordSuccessCode.WORD_LIST_FOUND, wordDescriptionDTOS);
+        return ApiResponse.success(DataSuccessCode.WORD_LIST_FOUND, wordDescriptionDTOS);
     }
 }
