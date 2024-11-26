@@ -8,6 +8,8 @@ public enum DataSuccessCode implements SuccessResponse {
     WORD_LIST_FOUND(HttpStatus.OK, "WORD2001", "야구 용어 목록을 조회하였습니다."),
 
     PLAYER_LIST_FOUND(HttpStatus.OK, "PLAYER2001", "야구 선수 목록을 조회하였습니다."),
+    PLAYER_FOUND(HttpStatus.OK, "PLAYER2002", "야구 선수 정보를 조회하였습니다."),
+
     ;
 
     private final HttpStatus httpStatus;
