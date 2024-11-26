@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BaseballWordRepository extends JpaRepository<BaseballWord, Long> {
+public interface BaseballWordRepository extends JpaRepository<BaseballWord, Long>, BaseballWordRepositoryCustom {
 }
