@@ -29,7 +29,6 @@ public class SecurityConfig{
                 .authorizeHttpRequests(authorize ->
                         authorize
                                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                                .requestMatchers("/h2/**").permitAll()
                                 .requestMatchers("/api/auth/**","/error").permitAll()
                                 .requestMatchers("/api/**").hasRole("USER")
                                 //.requestMatchers("/**").permitAll()     // 임시
