@@ -1,8 +1,10 @@
 name: Java Build and Deploy on develop
 
 on:
-  push:
+  pull_request:
     branches: [ "develop" ]
+    types:
+      - closed
 
 jobs:
   build:
