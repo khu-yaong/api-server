@@ -1,5 +1,6 @@
 package com.khu.yaong.domain.data.controller;
 
+import com.khu.yaong.domain.data.dto.PlayerReqDTO;
 import com.khu.yaong.domain.data.dto.PlayerResDTO;
 import com.khu.yaong.domain.data.service.PlayerService;
 import com.khu.yaong.domain.member.domain.Team;
@@ -8,9 +9,7 @@ import com.khu.yaong.global.common.response.data.DataSuccessCode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -50,5 +49,20 @@ public class PlayerController {
     ApiResponse<PlayerResDTO.PlayerDetailDTO> getPlayerInfo(@RequestParam Long playerId) {
         PlayerResDTO.PlayerDetailDTO playerDetailDTO = playerService.getPlayerInfo(playerId);
         return ApiResponse.success(DataSuccessCode.PLAYER_FOUND, playerDetailDTO);
+    }
+
+    @Operation(summary = "[구현완료] 투수 정보 수정 요청", description = """
+    ## 투수 정보 수정을 요청합니다.
+    * 수정 요청 정보를 redis에 저장합니다. 동일한 수정 요청이 10회 이상이면 DB에 반영하고 redis key를 삭제합니다.
+    * 동일한 회원이 10분 내에 전송한 동일한 수정 요청은 횟수에 포함되지 않습니다.
+    * pitcherId : 투수 아이디 (not playerId, fielderId)
+    """)
+    @PatchMapping("/players/pitchers/{pitcherId}")
+    ApiResponse<Void> requestPitcherMod(
+            @PathVariable Long pitcherId,
+            @RequestBody PlayerReqDTO.PitcherModDTO pitcherModDTO
+    ) {
+        playerService.requestPitcherMod(pitcherId, pitcherModDTO);
+        return ApiResponse.success(DataSuccessCode.PITCHER_INFO_MOD_REQUESTED);
     }
 }

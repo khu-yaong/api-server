@@ -3,6 +3,8 @@ package com.khu.yaong.domain.data.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.lang.reflect.Field;
+
 @Entity
 @Getter
 @Builder
@@ -51,4 +53,32 @@ public class Pitcher {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "player_id", nullable = false)
     private Player player;
+
+    public void setData(Field field, String value) {
+        String fieldName = field.getName();
+        if (field.getType() == Integer.class) {
+            int intValue = Integer.parseInt(value);
+            switch(fieldName) {
+                case ("win") -> this.win = intValue;
+                case ("lose") -> this.lose = intValue;
+                case ("sv") -> this.sv = intValue;
+                case ("hld") -> this.hld = intValue;
+                case ("so") -> this.so = intValue;
+                case ("ha") -> this.ha = intValue;
+                case ("hra") -> this.hra = intValue;
+                case ("bb") -> this.bb = intValue;
+            }
+        } else if (field.getType() == Double.class) {
+            double doubleValue = Double.parseDouble(value);
+            switch(fieldName) {
+                case ("era") -> this.era = doubleValue;
+                case ("whip") -> this.whip = doubleValue;
+            }
+        } else if (field.getType() == String.class) {
+            if (fieldName.equals("ip")) {
+                this.ip = value;
+            }
+        }
+    }
 }
+
