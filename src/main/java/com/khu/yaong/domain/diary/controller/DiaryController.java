@@ -3,8 +3,10 @@ package com.khu.yaong.domain.diary.controller;
 import com.khu.yaong.domain.diary.dto.DiaryRequestDto;
 import com.khu.yaong.domain.diary.dto.DiaryResponseDto;
 import com.khu.yaong.domain.diary.service.DiaryService;
+import com.khu.yaong.global.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,8 +34,9 @@ public class DiaryController {
 
     // 모든 관람 일지 목록 조회
     @GetMapping("/game_diaries")
-    public ResponseEntity<List<DiaryResponseDto>> getAllDiaries(@RequestParam Long memberId) {
-        List<DiaryResponseDto> responseDtoList = diaryService.getAllDiaries(memberId);
+    public ResponseEntity<List<DiaryResponseDto>> getAllDiaries(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        String authenticatedMemberId = userDetails.getUsername();  // 인증된 사용자 ID 가져오기
+        List<DiaryResponseDto> responseDtoList = diaryService.getAllDiaries(Long.valueOf(authenticatedMemberId));
         return ResponseEntity.ok(responseDtoList);
     }
 

@@ -3,6 +3,7 @@ package com.khu.yaong.domain.member.domain;
 
 import com.khu.yaong.domain.common.BaseTime;
 import com.khu.yaong.domain.mapping.domain.MemberPostLike;
+import com.khu.yaong.domain.member.dto.request.MemberProfileReqDto;
 import com.khu.yaong.domain.post.domain.Post;
 import com.khu.yaong.domain.diary.domain.Diary;
 import jakarta.persistence.*;
@@ -92,6 +93,17 @@ public class Member extends BaseTime {
     public void addMemberPostLike(MemberPostLike memberPostLike) {
         memberPostLikes.add(memberPostLike);
         memberPostLike.setMember(this);
+    }
+
+    public Member updateProfile(MemberProfileReqDto memberProfileReqDto) {
+        return Member.builder()
+                .id(this.id) // 기존 ID 유지
+                .username(memberProfileReqDto.getUsername() != null ? memberProfileReqDto.getUsername() : this.username)
+                .password(memberProfileReqDto.getPassword() != null ? memberProfileReqDto.getPassword() : this.password)
+                .email(memberProfileReqDto.getEmail() != null ? memberProfileReqDto.getEmail() : this.email)
+                .team(memberProfileReqDto.getTeam() != null ? memberProfileReqDto.getTeam() : this.team)
+                .profileImage(memberProfileReqDto.getImageUrl() != null ? memberProfileReqDto.getImageUrl() : this.profileImage) // 기존 프로필 이미지 유지
+                .build();
     }
 }
 
