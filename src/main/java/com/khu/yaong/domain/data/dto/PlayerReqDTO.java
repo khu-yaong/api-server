@@ -43,4 +43,33 @@ public class PlayerReqDTO {
             return Arrays.stream(fields).toList();
         }
     }
+
+    @Getter
+    @RequiredArgsConstructor
+    public static class FielderModDTO {
+
+        // rank
+        private final Integer opsRank;
+        private final Integer rRank;
+        private final Integer rbiRank;
+        private final Integer hrRank;
+        private final Integer avgRank;
+        private final Integer hRank;
+
+        // record
+        private final Double avg;
+        private final Integer hr;
+        private final Integer h;
+        private final Integer r;
+        private final Integer rbi;
+        private final Integer sb;
+        private final Double obp;
+        private final Double ops;
+
+        public static List<Field> getAllFields() {
+            Class<FielderModDTO> clazz = FielderModDTO.class;
+            Field[] fields = clazz.getDeclaredFields();
+            return Arrays.stream(fields).toList();
+        }
+    }
 }

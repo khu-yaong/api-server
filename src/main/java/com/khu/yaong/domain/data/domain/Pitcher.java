@@ -50,6 +50,24 @@ public class Pitcher {
     @Column
     private Double whip;     // whip
 
+    @Column
+    private Integer eraRank;
+
+    @Column
+    private Integer winRank;
+
+    @Column
+    private Integer svRank;
+
+    @Column
+    private Integer hldRank;
+
+    @Column
+    private Integer soRank;
+
+    @Column
+    private Integer whipRank;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "player_id", nullable = false)
     private Player player;
@@ -67,6 +85,12 @@ public class Pitcher {
                 case ("ha") -> this.ha = intValue;
                 case ("hra") -> this.hra = intValue;
                 case ("bb") -> this.bb = intValue;
+                case("eraRank") -> this.eraRank = intValue;
+                case ("winRank") -> this.winRank = intValue;
+                case ("svRank") -> this.svRank = intValue;
+                case ("hldRank") -> this.hldRank = intValue;
+                case ("soRank") -> this.soRank = intValue;
+                case ("whipRank") -> this.whipRank = intValue;
             }
         } else if (field.getType() == Double.class) {
             double doubleValue = Double.parseDouble(value);
