@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 public enum DataErrorCode implements ErrorResponse {
 
     PLAYER_NOT_FOUND(HttpStatus.NOT_FOUND, "PLAYER4001", "야구 선수를 찾을 수 없습니다."),
+    PITCHER_NOT_FOUND(HttpStatus.NOT_FOUND, "PLAYER4002", "투수를 찾을 수 없습니다."),
+    FIELDER_NOT_FOUND(HttpStatus.NOT_FOUND, "PLAYER4003", "야수를 찾을 수 없습니다."),
 
     ;
     private final HttpStatus httpStatus;

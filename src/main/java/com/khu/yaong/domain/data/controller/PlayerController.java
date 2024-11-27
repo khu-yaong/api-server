@@ -55,14 +55,31 @@ public class PlayerController {
     ## 투수 정보 수정을 요청합니다.
     * 수정 요청 정보를 redis에 저장합니다. 동일한 수정 요청이 10회 이상이면 DB에 반영하고 redis key를 삭제합니다.
     * 동일한 회원이 10분 내에 전송한 동일한 수정 요청은 횟수에 포함되지 않습니다.
-    * pitcherId : 투수 아이디 (not playerId, fielderId)
+    * 해당 선수가 투수가 아니면 자동으로 예외 처리됩니다.
+    * playerId : 선수 아이디 (not pitcherId, fielderId)
     """)
-    @PatchMapping("/players/pitchers/{pitcherId}")
+    @PatchMapping("/players/{playerId}/pitchers")
     ApiResponse<Void> requestPitcherMod(
-            @PathVariable Long pitcherId,
+            @PathVariable Long playerId,
             @RequestBody PlayerReqDTO.PitcherModDTO pitcherModDTO
     ) {
-        playerService.requestPitcherMod(pitcherId, pitcherModDTO);
+        playerService.requestPitcherMod(playerId, pitcherModDTO);
         return ApiResponse.success(DataSuccessCode.PITCHER_INFO_MOD_REQUESTED);
+    }
+
+    @Operation(summary = "[구현완료] 야수 정보 수정 요청", description = """
+    ## 야수 정보 수정을 요청합니다.
+    * 수정 요청 정보를 redis에 저장합니다. 동일한 수정 요청이 10회 이상이면 DB에 반영하고 redis key를 삭제합니다.
+    * 동일한 회원이 10분 내에 전송한 동일한 수정 요청은 횟수에 포함되지 않습니다.
+    * 해당 선수가 야수가 아니면 자동으로 예외 처리됩니다.
+    * playerId : 선수 아이디 (not pitcherId, fielderId)
+    """)
+    @PatchMapping("/players/{playerId}/fielders")
+    ApiResponse<Void> requestFielderMod(
+            @PathVariable Long playerId,
+            @RequestBody PlayerReqDTO.FielderModDTO fielderModDTO
+    ) {
+        playerService.requestFielderMod(playerId, fielderModDTO);
+        return ApiResponse.success(DataSuccessCode.FIELDER_INFO_MOD_REQUESTED);
     }
 }
