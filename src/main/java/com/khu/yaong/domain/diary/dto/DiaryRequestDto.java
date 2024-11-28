@@ -18,5 +18,4 @@ public class DiaryRequestDto {
     private int team2Score;
     private String seat;
     private String content;
-    private String imageUrl;
 }
