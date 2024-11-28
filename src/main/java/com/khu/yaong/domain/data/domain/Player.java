@@ -1,11 +1,10 @@
 package com.khu.yaong.domain.data.domain;
 
-import com.khu.yaong.domain.data.dto.Team;
+import com.khu.yaong.domain.member.domain.Team;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -38,9 +37,11 @@ public class Player {
     @Column(length = 30)
     private String hwSpec;
 
+    @Setter
     @OneToOne(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true)
     private Pitcher pitcher = null;
 
+    @Setter
     @OneToOne(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true)
     private Fielder fielder = null;
 }

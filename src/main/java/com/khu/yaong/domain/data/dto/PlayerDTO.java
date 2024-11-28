@@ -3,6 +3,7 @@ package com.khu.yaong.domain.data.dto;
 import com.khu.yaong.domain.data.domain.Fielder;
 import com.khu.yaong.domain.data.domain.Pitcher;
 import com.khu.yaong.domain.data.domain.Player;
+import com.khu.yaong.domain.member.domain.Team;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -60,6 +61,8 @@ public class PlayerDTO {
                 .so(toInteger(so))
                 .ha(toInteger(ha))
                 .hra(toInteger(hr))
+                .bb(toInteger(bb))
+                .whip(toDouble(whip))
                 .player(player)
                 .build();
     }
