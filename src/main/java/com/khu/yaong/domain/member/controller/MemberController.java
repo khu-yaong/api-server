@@ -1,6 +1,7 @@
 package com.khu.yaong.domain.member.controller;
 
 import com.khu.yaong.domain.auth.service.AuthService;
+import com.khu.yaong.domain.member.dto.request.MemberProfileReqDto;
 import com.khu.yaong.domain.member.dto.response.MemberProfileResponseDto;
 import com.khu.yaong.domain.member.exception.MemberSuccessCode;
 import com.khu.yaong.domain.member.service.MemberService;
@@ -40,6 +41,15 @@ public class MemberController {
 
 
     // 회원정보 수정
+    @PutMapping("/update")
+    public ResponseEntity<ApiResponse<Void>> updateMember(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestBody MemberProfileReqDto updateRequestDto) {
+        // 인증된 사용자 ID 가져오기
+        String authenticatedMemberId = userDetails.getUsername();
+        memberService.updateMemberProfile(Long.valueOf(authenticatedMemberId), updateRequestDto);
+        return ResponseEntity.ok(ApiResponse.success(MemberSuccessCode.UPDATE_SUCCESS));
+    }
 
     // 회원탈퇴
     @PostMapping("/withdraw")
