@@ -17,5 +17,4 @@ public class MemberRegisterRequestDto {
     private String email;
     private MemberRole role;
     private Team team;
-    private String profileImage;
 }

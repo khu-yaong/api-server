@@ -7,11 +7,14 @@ import com.khu.yaong.domain.post.dto.PostResDTO;
 import com.khu.yaong.domain.post.service.PostService;
 import com.khu.yaong.global.common.response.ApiResponse;
 import com.khu.yaong.global.common.response.post.PostSuccessCode;
+import com.khu.yaong.global.s3.S3ImageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,7 +24,10 @@ import java.util.List;
 @Tag(name = "Home API", description = "홈화면(게시글) 관련 API")
 public class PostController {
 
+    private final S3ImageService s3ImageService;
     private final PostService postService;
+
+    private final String dir = "post/";
 
 /*---------------------------------------- 게시글 ----------------------------------------*/
 
@@ -36,9 +42,17 @@ public class PostController {
                  TIP,
                  ETC
     """)
-    @PostMapping("/posts")
-    ApiResponse<PostResDTO.PostDetailDTO> createPost(@RequestBody PostReqDTO.PostDTO postDTO) {
-        PostResDTO.PostDetailDTO postDetailDTO = postService.createPost(postDTO);
+    @PostMapping(value = "/posts", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    ApiResponse<PostResDTO.PostDetailDTO> createPost(
+            @RequestPart PostReqDTO.PostDTO postDTO,
+            @RequestPart(required = false) MultipartFile image) {
+        String imageUrl;
+        if (image == null || image.isEmpty()) {
+            imageUrl = null;
+        } else {
+            imageUrl = s3ImageService.uploadImage(dir, image);
+        }
+        PostResDTO.PostDetailDTO postDetailDTO = postService.createPost(postDTO, imageUrl);
         return ApiResponse.success(PostSuccessCode.POST_CREATED, postDetailDTO);
     }
 
@@ -53,9 +67,18 @@ public class PostController {
                  TIP,
                  ETC
     """)
-    @PatchMapping("/posts/{postId}")
-    ApiResponse<PostResDTO.PostDetailDTO> updatePost(@PathVariable Long postId, @RequestBody PostReqDTO.PostDTO postDTO) {
-        PostResDTO.PostDetailDTO postDetailDTO = postService.updatePost(postId, postDTO);
+    @PatchMapping(value = "/posts/{postId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    ApiResponse<PostResDTO.PostDetailDTO> updatePost(
+            @PathVariable Long postId,
+            @RequestPart PostReqDTO.PostDTO postDTO,
+            @RequestPart(required = false) MultipartFile image) {
+        String imageUrl;
+        if (image == null || image.isEmpty()) {
+            imageUrl = null;
+        } else {
+            imageUrl = s3ImageService.uploadImage(dir, image);
+        }
+        PostResDTO.PostDetailDTO postDetailDTO = postService.updatePost(postId, postDTO, imageUrl);
         return ApiResponse.success(PostSuccessCode.POST_UPDATED, postDetailDTO);
     }
 

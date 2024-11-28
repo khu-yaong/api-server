@@ -6,28 +6,39 @@ import com.khu.yaong.domain.diary.dto.DiaryResponseDto;
 import com.khu.yaong.domain.diary.exception.DiaryNotFoundException;
 import com.khu.yaong.domain.diary.repository.DiaryRepository;
 import com.khu.yaong.domain.member.domain.Member;
+import com.khu.yaong.domain.member.exception.MemberErrorCode;
+import com.khu.yaong.domain.member.exception.MemberException;
 import com.khu.yaong.domain.member.repository.MemberRepository;
+import com.khu.yaong.global.s3.S3ImageService;
+import com.khu.yaong.global.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class DiaryService {
+
     private final DiaryRepository diaryRepository;
     private final MemberRepository memberRepository;
+
+    private final S3ImageService s3ImageService;
 
 
     // 관람 일지 생성
     @Transactional
-    public DiaryResponseDto createDiary(Long memberId, DiaryRequestDto requestDto) {
+    public DiaryResponseDto createDiary(DiaryRequestDto requestDto, String imageUrl) {
+
+        // Authorization
+        Long memberId = SecurityUtil.getCurrentMemberId();
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("Member not found with id: " + memberId));
+                .orElseThrow(() -> {
+                    s3ImageService.deleteImageFromS3(imageUrl);
+                    return new MemberException(MemberErrorCode.MEMBER_NOT_FOUND);
+                });
 
         Diary diary = Diary.builder()
                 .member(member)
@@ -39,7 +50,7 @@ public class DiaryService {
                 .team2Score(requestDto.getTeam2Score())
                 .seat(requestDto.getSeat())
                 .content(requestDto.getContent())
-                .imageUrl(requestDto.getImageUrl())
+                .imageUrl(imageUrl)
                 .build();
         diaryRepository.save(diary);
         return new DiaryResponseDto(diary);
@@ -65,9 +76,23 @@ public class DiaryService {
 
     // 관람 일지 수정
     @Transactional
-    public DiaryResponseDto updateDiary(Long diaryId, DiaryRequestDto requestDto) {
+    public DiaryResponseDto updateDiary(Long diaryId, DiaryRequestDto requestDto, String imageUrl) {
+
+        // Authorization
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        memberRepository.findById(memberId)
+                .orElseThrow(() -> {
+                    s3ImageService.deleteImageFromS3(imageUrl);
+                    return new MemberException(MemberErrorCode.MEMBER_NOT_FOUND);
+                });
+
         Diary diary = diaryRepository.findById(diaryId)
-                .orElseThrow(() -> new DiaryNotFoundException("Diary not found with id: " + diaryId));
+                .orElseThrow(() -> {
+                    s3ImageService.deleteImageFromS3(imageUrl);
+                    return new DiaryNotFoundException("Diary not found with id: " + diaryId);
+                });
+
+        String existingImageUrl = diary.getImageUrl();
 
         diary.updateDiary(
                 requestDto.getMatchDate(),
@@ -78,8 +103,13 @@ public class DiaryService {
                 requestDto.getTeam2Score(),
                 requestDto.getSeat(),
                 requestDto.getContent(),
-                requestDto.getImageUrl()
+                imageUrl
         );
+        diaryRepository.save(diary);
+
+        // 기존 프로필 이미지 삭제
+        s3ImageService.deleteImageFromS3(existingImageUrl);
+
         return new DiaryResponseDto(diary);
     }
 

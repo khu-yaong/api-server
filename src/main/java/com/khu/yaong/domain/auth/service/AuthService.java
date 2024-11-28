@@ -9,6 +9,7 @@ import com.khu.yaong.domain.auth.dto.request.MemberLoginRequestDto;
 import com.khu.yaong.domain.auth.dto.request.MemberRegisterRequestDto;
 import com.khu.yaong.domain.member.domain.MemberRole;
 import com.khu.yaong.domain.member.repository.MemberRepository;
+import com.khu.yaong.global.s3.S3ImageService;
 import com.khu.yaong.global.security.jwt.JwtTokenProvider;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,8 @@ public class AuthService {
     private final EmailService emailService;
     private final EmailCodeRepository emailCodeRepository;
 
+    private final S3ImageService s3ImageService;
+
     public boolean existsByEmail(String email) {
         return memberRepository.existsByEmail(email);
     }
@@ -33,20 +36,24 @@ public class AuthService {
         return memberRepository.existsByUsername(username);
     }
 
-    public MemberRegisterResponseDto register(MemberRegisterRequestDto request) {
+    @Transactional
+    public MemberRegisterResponseDto register(MemberRegisterRequestDto request, String imageUrl) {
         if (existsByEmail(request.getEmail())) {
+            s3ImageService.deleteImageFromS3(imageUrl);
             throw new AuthException(AuthErrorCode.EMAIL_ALREADY_EXISTS);
         }
         if (existsByUsername(request.getUsername())) {
+            s3ImageService.deleteImageFromS3(imageUrl);
             throw new AuthException(AuthErrorCode.USERNAME_ALREADY_EXISTS);
         }
+
         Member member = Member.builder()
                 .username(request.getUsername())
                 .password(request.getPassword())
                 .email(request.getEmail())
                 .role(request.getRole())
                 .team(request.getTeam())
-                .profileImage(request.getProfileImage())
+                .profileImage(imageUrl)
                 .build();
         Member savedMember = memberRepository.save(member);
         return new MemberRegisterResponseDto(savedMember.getId(),savedMember.getCreatedDate());
