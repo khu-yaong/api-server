@@ -13,10 +13,13 @@ import com.khu.yaong.domain.auth.service.AuthService;
 import com.khu.yaong.domain.auth.service.GoogleOAuthService;
 import com.khu.yaong.domain.auth.service.KakaoOAuthService;
 import com.khu.yaong.global.common.response.ApiResponse;
+import com.khu.yaong.global.s3.S3ImageService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
@@ -25,13 +28,18 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AuthController {
 
+    private final S3ImageService s3ImageService;
     private final AuthService authService;
     private final KakaoOAuthService kakaoOAuthService;
     private final GoogleOAuthService googleOAuthService;
 
-    @PostMapping("/register")
-    public ResponseEntity<ApiResponse<MemberRegisterResponseDto>> register(@RequestBody MemberRegisterRequestDto request) {
-        MemberRegisterResponseDto response = authService.register(request);
+    @PostMapping(value = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ApiResponse<MemberRegisterResponseDto>> register(
+            @RequestPart MemberRegisterRequestDto request,
+            @RequestPart MultipartFile profileImage) {
+        String dir = "profile/";
+        String imageUrl = s3ImageService.uploadImage(dir, profileImage);
+        MemberRegisterResponseDto response = authService.register(request, imageUrl);
         return new ResponseEntity<>(ApiResponse.success(AuthSuccessCode.REGISTER_SUCCESS, response), HttpStatus.CREATED);
     }
 
