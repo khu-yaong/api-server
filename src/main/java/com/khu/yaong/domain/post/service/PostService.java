@@ -12,9 +12,9 @@ public interface PostService {
 
 /*---------------------------------------- 게시글 ----------------------------------------*/
 
-    PostResDTO.PostDetailDTO createPost(PostReqDTO.PostDTO postDTO);
+    PostResDTO.PostDetailDTO createPost(PostReqDTO.PostDTO postDTO, String imageUrl);
 
-    PostResDTO.PostDetailDTO updatePost(Long postId, PostReqDTO.PostDTO postDTO);
+    PostResDTO.PostDetailDTO updatePost(Long postId, PostReqDTO.PostDTO postDTO, String imageUrl);
 
     PostResDTO.PostDetailDTO getPost(Long postId);
 

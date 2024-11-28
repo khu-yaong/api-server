@@ -14,6 +14,7 @@ import com.khu.yaong.domain.post.repository.PostRepository;
 import com.khu.yaong.global.common.exception.BaseException;
 import com.khu.yaong.global.common.response.member.MemberErrorCode;
 import com.khu.yaong.global.common.response.post.PostErrorCode;
+import com.khu.yaong.global.s3.S3ImageService;
 import com.khu.yaong.global.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,22 +33,27 @@ public class PostServiceImpl implements PostService {
     private final MemberPostLikeRepository memberPostLikeRepository;
     private final CommentRepository commentRepository;
 
+    private final S3ImageService s3ImageService;
+
 /*---------------------------------------- 게시글 ----------------------------------------*/
 
     @Override
-    public PostResDTO.PostDetailDTO createPost(PostReqDTO.PostDTO postDTO) {
+    public PostResDTO.PostDetailDTO createPost(PostReqDTO.PostDTO postDTO, String imageUrl) {
 
         // Authorization
         Long memberId = SecurityUtil.getCurrentMemberId();
         Member author = memberRepository.findById(memberId)
-                .orElseThrow(() -> new BaseException(MemberErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> {
+                    s3ImageService.deleteImageFromS3(imageUrl);
+                    return new BaseException(MemberErrorCode.MEMBER_NOT_FOUND);
+                });
 
         Post post = Post.builder()
                 .author(author)
                 .category(postDTO.getCategory())
                 .title(postDTO.getTitle())
                 .content(postDTO.getContent())
-                .imageUrl(postDTO.getImageUrl())
+                .imageUrl(imageUrl)
                 .countLike(0L)
                 .countComment(0L)
                 .build();
@@ -59,24 +65,36 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostResDTO.PostDetailDTO updatePost(Long postId, PostReqDTO.PostDTO postDTO) {
+    public PostResDTO.PostDetailDTO updatePost(Long postId, PostReqDTO.PostDTO postDTO, String imageUrl) {
 
         // Authorization
         Long memberId = SecurityUtil.getCurrentMemberId();
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new BaseException(MemberErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> {
+                    s3ImageService.deleteImageFromS3(imageUrl);
+                    return new BaseException(MemberErrorCode.MEMBER_NOT_FOUND);
+                });
 
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new BaseException(PostErrorCode.POST_NOT_FOUND));
+                .orElseThrow(() -> {
+                    s3ImageService.deleteImageFromS3(imageUrl);
+                    return new BaseException(PostErrorCode.POST_NOT_FOUND);
+                });
 
         // 게시글 작성자와 로그인 회원 일치 여부 확인
         if (!member.equals(post.getAuthor())) {
+            s3ImageService.deleteImageFromS3(imageUrl);
             throw new BaseException(PostErrorCode.POST_AUTHOR_ONLY_ALLOWED);
         }
 
-        post.updatePost(postDTO.getCategory(), postDTO.getTitle(), postDTO.getContent(), postDTO.getImageUrl());
+        String existingImageUrl = post.getImageUrl();
+
+        post.updatePost(postDTO.getCategory(), postDTO.getTitle(), postDTO.getContent(), imageUrl);
         Post updatedPost = postRepository.save(post);
         member.updatePost(updatedPost);
+
+        // 기존 이미지 url 삭제
+        s3ImageService.deleteImageFromS3(existingImageUrl);
 
         return PostResDTO.PostDetailDTO.toDTO(updatedPost);
     }
