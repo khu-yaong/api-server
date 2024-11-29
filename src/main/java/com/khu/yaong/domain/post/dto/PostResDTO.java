@@ -75,12 +75,14 @@ public class PostResDTO {
         private final Long postId;
         private final Long likeCount;
         private final Long countComment;
+        private final Boolean isLiked;
 
-        public static PostStatusDTO toDTO(Post post) {
+        public static PostStatusDTO toDTO(Post post, Boolean isLiked) {
             return PostStatusDTO.builder()
                     .postId(post.getId())
                     .likeCount(post.getCountLike())
                     .countComment(post.getCountComment())
+                    .isLiked(isLiked)
                     .build();
         }
     }

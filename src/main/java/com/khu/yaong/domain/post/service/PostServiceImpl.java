@@ -128,7 +128,7 @@ public class PostServiceImpl implements PostService {
         postRepository.delete(post);
         member.deletePost(post);
 
-        return PostResDTO.PostStatusDTO.toDTO(post);
+        return PostResDTO.PostStatusDTO.toDTO(post, Boolean.FALSE);
     }
 
     @Override
@@ -173,7 +173,7 @@ public class PostServiceImpl implements PostService {
         post.plusCountLike();
         Post updatedPost = postRepository.save(post);
 
-        return PostResDTO.PostStatusDTO.toDTO(updatedPost);
+        return PostResDTO.PostStatusDTO.toDTO(updatedPost, Boolean.TRUE);
     }
 
     @Override
@@ -195,6 +195,6 @@ public class PostServiceImpl implements PostService {
         post.minusCountLike();
         Post updatedPost = postRepository.save(post);
 
-        return PostResDTO.PostStatusDTO.toDTO(updatedPost);
+        return PostResDTO.PostStatusDTO.toDTO(updatedPost, Boolean.FALSE);
     }
 }
