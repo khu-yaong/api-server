@@ -32,8 +32,9 @@ public class PostResDTO {
         private final LocalDateTime createdDate;
         private final Long countLike;
         private final Long countComment;
+        private final Boolean isLiked;
 
-        public static PostInfoDTO toDTO(Post post) {
+        public static PostInfoDTO toDTO(Post post, Boolean isLiked) {
             return PostInfoDTO.builder()
                     .authorName(post.getAuthor().getUsername())
                     .authorProfileImage(post.getAuthor().getProfileImage())
@@ -45,6 +46,7 @@ public class PostResDTO {
                     .createdDate(post.getCreatedDate())
                     .countLike(post.getCountLike())
                     .countComment(post.getCountComment())
+                    .isLiked(isLiked)
                     .build();
         }
     }
@@ -57,9 +59,9 @@ public class PostResDTO {
         private final PostInfoDTO post;
         private final List<CommentResDTO.CommentDetailDTO> comments;
 
-        public static PostDetailDTO toDTO(Post post) {
+        public static PostDetailDTO toDTO(Post post, Boolean isLiked) {
             return PostDetailDTO.builder()
-                    .post(PostInfoDTO.toDTO(post))
+                    .post(PostInfoDTO.toDTO(post, isLiked))
                     .comments(post.getComments().stream()
                             .map(CommentResDTO.CommentDetailDTO::toDTO)
                             .toList())
