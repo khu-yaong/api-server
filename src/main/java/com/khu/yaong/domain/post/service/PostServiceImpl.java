@@ -61,7 +61,7 @@ public class PostServiceImpl implements PostService {
         Post savedPost = postRepository.save(post);
         author.addPost(savedPost);
 
-        return PostResDTO.PostDetailDTO.toDTO(savedPost);
+        return PostResDTO.PostDetailDTO.toDTO(savedPost, Boolean.FALSE);
     }
 
     @Override
@@ -96,15 +96,30 @@ public class PostServiceImpl implements PostService {
         // 기존 이미지 url 삭제
         s3ImageService.deleteImageFromS3(existingImageUrl);
 
-        return PostResDTO.PostDetailDTO.toDTO(updatedPost);
+        // 해당 게시글 좋아요 여부 불러오기
+        if (memberPostLikeRepository.existsByMemberIdAndPostId(memberId, postId)) {
+            return PostResDTO.PostDetailDTO.toDTO(updatedPost, Boolean.TRUE);
+        }
+        return PostResDTO.PostDetailDTO.toDTO(updatedPost, Boolean.FALSE);
     }
 
     @Override
     @Transactional(readOnly = true)
     public PostResDTO.PostDetailDTO getPost(Long postId) {
+
+        // Authorization
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        memberRepository.findById(memberId)
+                .orElseThrow(() -> new BaseException(MemberErrorCode.MEMBER_NOT_FOUND));
+
         Post post = postRepository.findById(postId)
                 .orElseThrow(RuntimeException::new);
-        return PostResDTO.PostDetailDTO.toDTO(post);
+
+        // 해당 게시글 좋아요 여부 불러오기
+        if (memberPostLikeRepository.existsByMemberIdAndPostId(memberId, postId)) {
+            return PostResDTO.PostDetailDTO.toDTO(post, Boolean.TRUE);
+        }
+        return PostResDTO.PostDetailDTO.toDTO(post, Boolean.FALSE);
     }
 
     @Override
@@ -140,7 +155,13 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new BaseException(MemberErrorCode.MEMBER_NOT_FOUND));
 
         return postRepository.findPostsByCategoryAndTeam(category, team, cursorDateTime, cursorPostId, pageSize).stream()
-                .map(PostResDTO.PostInfoDTO::toDTO)
+                .map(post -> {
+                    // 해당 게시글 좋아요 여부 불러오기
+                    if (memberPostLikeRepository.existsByMemberIdAndPostId(memberId, post.getId())) {
+                        return PostResDTO.PostInfoDTO.toDTO(post, Boolean.TRUE);
+                    }
+                    return PostResDTO.PostInfoDTO.toDTO(post, Boolean.FALSE);
+                })
                 .toList();
     }
 
