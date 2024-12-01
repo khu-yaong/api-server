@@ -64,7 +64,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	// selenium
 	implementation 'org.jsoup:jsoup:1.15.3'
-	implementation 'org.seleniumhq.selenium:selenium-java:4.4.0'
+	implementation 'org.seleniumhq.selenium:selenium-java:4.8.0'
 
 
 
