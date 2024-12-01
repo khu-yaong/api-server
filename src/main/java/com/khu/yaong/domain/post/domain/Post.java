@@ -65,6 +65,10 @@ public class Post extends BaseTime {
         comments.remove(comment);
     }
 
+    public void plusCountComment() { this.countComment++; }
+
+    public void minusCountComment() { this.countComment--; }
+
     public void addMemberPostLike(MemberPostLike memberPostLike) {
         memberPostLikes.add(memberPostLike);
         memberPostLike.setPost(this);

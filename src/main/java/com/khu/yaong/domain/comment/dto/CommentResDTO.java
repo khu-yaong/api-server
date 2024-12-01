@@ -15,6 +15,22 @@ public class CommentResDTO {
     @Getter
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     @Builder(access = AccessLevel.PRIVATE)
+    public static class CommentInfoDTO {
+
+        private final Long commentCount;
+        private final CommentDetailDTO comment;
+
+        public static CommentInfoDTO toDTO(Comment comment) {
+            return CommentInfoDTO.builder()
+                    .commentCount(comment.getPost().getCountComment())
+                    .comment(CommentDetailDTO.toDTO(comment))
+                    .build();
+        }
+    }
+
+    @Getter
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+    @Builder(access = AccessLevel.PRIVATE)
     public static class CommentDetailDTO {
 
         // author info
