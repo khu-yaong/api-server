@@ -6,12 +6,14 @@ import com.khu.yaong.domain.diary.service.DiaryService;
 import com.khu.yaong.global.s3.S3ImageService;
 import com.khu.yaong.global.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cglib.core.Local;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -40,18 +42,10 @@ public class DiaryController {
     }
 
     // 관람 일지 상세 조회
-    @GetMapping("/game_diaries/{record_id}")
-    public ResponseEntity<DiaryResponseDto> getDiary(@PathVariable("record_id") Long diaryId) {
-        DiaryResponseDto responseDto = diaryService.getDiaryById(diaryId);
+    @GetMapping("/game_diaries/{match_date}")
+    public ResponseEntity<DiaryResponseDto> getDiary(@PathVariable("match_date") LocalDate matchDate) {
+        DiaryResponseDto responseDto = diaryService.getDiaryByMatchDate(matchDate);
         return ResponseEntity.ok(responseDto);
-    }
-
-    // 모든 관람 일지 목록 조회
-    @GetMapping("/game_diaries")
-    public ResponseEntity<List<DiaryResponseDto>> getAllDiaries(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        String authenticatedMemberId = userDetails.getUsername();  // 인증된 사용자 ID 가져오기
-        List<DiaryResponseDto> responseDtoList = diaryService.getAllDiaries(Long.valueOf(authenticatedMemberId));
-        return ResponseEntity.ok(responseDtoList);
     }
 
     // 관람 일지 내용 수정
