@@ -10,11 +10,14 @@ import com.khu.yaong.domain.member.exception.MemberErrorCode;
 import com.khu.yaong.domain.member.exception.MemberException;
 import com.khu.yaong.domain.member.repository.MemberRepository;
 import com.khu.yaong.global.s3.S3ImageService;
+import com.khu.yaong.global.security.CustomUserDetails;
 import com.khu.yaong.global.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,22 +61,19 @@ public class DiaryService {
 
     // 단일 관람 일지 조회
     @Transactional(readOnly = true)
-    public DiaryResponseDto getDiaryById(Long recordId) {
-        Diary diary = diaryRepository.findById(recordId)
-                .orElseThrow(() -> new DiaryNotFoundException("Diary not found with id: " + recordId));
+    public DiaryResponseDto getDiaryByMatchDate(LocalDate date) {
+        Diary diary = diaryRepository.findByMatchDate(date)
+                .orElseThrow(() -> new DiaryNotFoundException("Diary not found with date: " + date));
         return new DiaryResponseDto(diary);
     }
 
-
     // 모든 관람 일지 조회
     @Transactional(readOnly = true)
-    public List<DiaryResponseDto> getAllDiaries(Long memberId) {
+    public List<DiaryResponseDto> getAllDiaries(Long memberId){
         List<Diary> diaries = diaryRepository.findAllByMemberId(memberId);
-        return diaries.stream()
-                .map(DiaryResponseDto::new)
+        return diaries.stream().map(DiaryResponseDto::new)
                 .collect(Collectors.toList());
     }
-
     // 관람 일지 수정
     @Transactional
     public DiaryResponseDto updateDiary(Long diaryId, DiaryRequestDto requestDto, String imageUrl) {
