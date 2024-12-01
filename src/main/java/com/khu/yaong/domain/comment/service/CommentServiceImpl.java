@@ -27,7 +27,7 @@ public class CommentServiceImpl implements CommentService {
 /*---------------------------------------- 댓글 ----------------------------------------*/
 
     @Override
-    public CommentResDTO.CommentDetailDTO createComment(Long postId, CommentReqDTO commentReqDTO) {
+    public CommentResDTO.CommentInfoDTO createComment(Long postId, CommentReqDTO commentReqDTO) {
 
         // Authorization
         Long memberId = SecurityUtil.getCurrentMemberId();
@@ -45,12 +45,14 @@ public class CommentServiceImpl implements CommentService {
 
         Comment savedComment = commentRepository.save(comment);
         post.addComment(savedComment);
+        post.plusCountComment();
+        postRepository.save(post);
 
-        return CommentResDTO.CommentDetailDTO.toDTO(savedComment);
+        return CommentResDTO.CommentInfoDTO.toDTO(savedComment);
     }
 
     @Override
-    public CommentResDTO.CommentDetailDTO deleteComment(Long commentId) {
+    public CommentResDTO.CommentInfoDTO deleteComment(Long commentId) {
 
         // Authorization
         Long memberId = SecurityUtil.getCurrentMemberId();
@@ -66,7 +68,9 @@ public class CommentServiceImpl implements CommentService {
 
         commentRepository.delete(comment);
         comment.getPost().deleteComment(comment);
+        comment.getPost().minusCountComment();
+        postRepository.save(comment.getPost());
 
-        return CommentResDTO.CommentDetailDTO.toDTO(comment);
+        return CommentResDTO.CommentInfoDTO.toDTO(comment);
     }
 }
