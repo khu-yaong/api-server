@@ -48,6 +48,14 @@ public class DiaryController {
         return ResponseEntity.ok(responseDto);
     }
 
+    // 모든 관람 일지 조회
+    @GetMapping("/game_diaries")
+    public ResponseEntity<List<DiaryResponseDto>> getAllDiaries(@AuthenticationPrincipal CustomUserDetails userDetails){
+        String authenticatedMemberId = userDetails.getUsername(); // 인증된 사용자 ID 가져오기
+        List<DiaryResponseDto> responseDtoList = diaryService.getAllDiaries(Long.valueOf(authenticatedMemberId));
+        return ResponseEntity.ok(responseDtoList);
+    }
+
     // 관람 일지 내용 수정
     @PutMapping(value = "/game_diaries/{record_id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<DiaryResponseDto> updateDiary(
