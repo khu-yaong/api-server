@@ -2,15 +2,15 @@ package com.khu.yaong.global.s3;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.*;
 import com.amazonaws.util.IOUtils;
+import com.khu.yaong.domain.mp3.domain.Mp3File;
 import com.khu.yaong.global.common.exception.BaseException;
 import com.khu.yaong.global.common.response.s3.S3ErrorCode;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.management.ManagementPermission;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -27,12 +28,51 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 @Component
-@RequiredArgsConstructor
 public class S3Mp3Service {
     private final AmazonS3 amazonS3;
 
-    @Value("${cloud.aws.s3.bucket}")
+    public S3Mp3Service(@Qualifier("secondAmazonS3") AmazonS3 amazonS3) {
+        this.amazonS3 = amazonS3;
+    }
+
+    @Value("${cloud.aws.accounts.second-account.s3.bucket-name}")
     private String bucketName;
+
+    public List<Mp3FileDTO> listFilesInBucket() {
+        List<Mp3FileDTO> files = new ArrayList<>();
+
+        ListObjectsV2Request request = new ListObjectsV2Request()
+                .withBucketName(bucketName)
+                .withPrefix("baseballSong/");
+        ListObjectsV2Result result;
+
+        do {
+            result = amazonS3.listObjectsV2(request);
+
+            for (S3ObjectSummary summary : result.getObjectSummaries()) {
+                String fileName = summary.getKey()
+                        .substring(summary.getKey().lastIndexOf('/') + 1);
+                if (fileName.endsWith(".mp3")) {
+                    String fileUrl = amazonS3.getUrl(bucketName, summary.getKey()).toString();
+                    files.add(new Mp3FileDTO(fileName, fileUrl));
+                }
+            }
+            request.setContinuationToken(result.getNextContinuationToken());
+        } while (result.isTruncated());
+        return files;
+    }
+
+    @Getter
+    public static class Mp3FileDTO {
+        private final String fileName;
+        private final String mp3Url;
+
+        public Mp3FileDTO(String fileName, String mp3Url) {
+            this.fileName = fileName;
+            this.mp3Url = mp3Url;
+        }
+
+    }
 
     public String uploadMp3(String dir, MultipartFile mp3) {
         // image가 비어있으면 오류

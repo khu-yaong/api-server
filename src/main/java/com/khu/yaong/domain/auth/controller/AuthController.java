@@ -29,7 +29,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AuthController {
 
-    @Value("${cloud.aws.s3.default-profile}")
+    @Value("${cloud.aws.accounts.first-account.s3.default-profile}")
     private String defaultProfile;
 
     private final S3ImageService s3ImageService;

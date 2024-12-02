@@ -9,6 +9,7 @@ import com.amazonaws.util.IOUtils;
 import com.khu.yaong.global.common.exception.BaseException;
 import com.khu.yaong.global.common.response.s3.S3ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,12 +28,14 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Component
-@RequiredArgsConstructor
 public class S3ImageService {
 
     private final AmazonS3 amazonS3;
 
-    @Value("${cloud.aws.s3.bucket}")
+    public S3ImageService(@Qualifier("firstAmazonS3") AmazonS3 amazonS3) {
+        this.amazonS3 = amazonS3;
+    }
+    @Value("${cloud.aws.accounts.first-account.s3.bucket-name}")
     private String bucketName;
 
     public String uploadImage(String dir, MultipartFile image) {
