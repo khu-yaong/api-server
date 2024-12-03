@@ -8,27 +8,49 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 @Configuration
 public class S3Config {
 
-    @Value("${cloud.aws.credentials.access-key}")
-    private String accessKey;
+    @Value("${cloud.aws.accounts.first-account.credentials.access-key}")
+    private String firstAccessKey;
 
-    @Value("${cloud.aws.credentials.secret-key}")
-    private String secretKey;
+    @Value("${cloud.aws.accounts.first-account.credentials.secret-key}")
+    private String firstSecretKey;
 
-    @Value("${cloud.aws.region.static}")
-    private String region;
+    @Value("${cloud.aws.accounts.first-account.region.static}")
+    private String firstRegion;
 
-    @Bean
-    public AmazonS3 amazonS3() {
-        AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
+    @Value("${cloud.aws.accounts.second-account.credentials.access-key}")
+    private String secondAccessKey;
+
+    @Value("${cloud.aws.accounts.second-account.credentials.secret-key}")
+    private String secondSecretKey;
+
+    @Value("${cloud.aws.accounts.second-account.region.static}")
+    private String secondRegion;
+
+    @Bean(name = "firstAmazonS3")
+    @Primary
+    public AmazonS3 firstAmazonS3() {
+        AWSCredentials credentials = new BasicAWSCredentials(firstAccessKey, firstSecretKey);
 
         return AmazonS3ClientBuilder
                 .standard()
                 .withCredentials(new AWSStaticCredentialsProvider(credentials))
-                .withRegion(region)
+                .withRegion(firstRegion)
+                .build();
+    }
+
+    @Bean(name = "secondAmazonS3")
+    public AmazonS3 secondAmazonS3() {
+        AWSCredentials credentials = new BasicAWSCredentials(secondAccessKey, secondSecretKey);
+
+        return AmazonS3ClientBuilder
+                .standard()
+                .withCredentials(new AWSStaticCredentialsProvider(credentials))
+                .withRegion(secondRegion)
                 .build();
     }
 }

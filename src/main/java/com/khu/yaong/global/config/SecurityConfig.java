@@ -31,6 +31,7 @@ public class SecurityConfig{
                                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                                 .requestMatchers("/api/auth/**","/error").permitAll()
                                 .requestMatchers("/api/**").hasRole("USER")
+                                .requestMatchers("/mp3-files/sync").permitAll() // 인증 제외
                                 //.requestMatchers("/**").permitAll()     // 임시
                                 .requestMatchers("/login/**").permitAll()
                                 .requestMatchers("/api/users/login/**").permitAll()
