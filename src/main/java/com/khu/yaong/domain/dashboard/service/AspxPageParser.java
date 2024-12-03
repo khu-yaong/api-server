@@ -24,7 +24,6 @@ public class AspxPageParser {
         if (htmlContent == null || htmlContent.isEmpty()) {
             throw new CrawlingException(CrawlingErrorCode.PARSE_FAILED);
         }
-        Map<String, Object> result = new HashMap<>();
         Document doc = Jsoup.parse(htmlContent);
 
         // 1. 팀 이름 및 점수 추출
@@ -52,9 +51,9 @@ public class AspxPageParser {
         Element firstBaseRunner = doc.selectFirst(".playerName .typing1");
         Element secondBaseRunner = doc.selectFirst(".playerName .typing2");
         Element thirdBaseRunner = doc.selectFirst(".playerName .typing3");
-        baseRunners.put("1루", firstBaseRunner != null ? firstBaseRunner.text() : "없음");
-        baseRunners.put("2루", secondBaseRunner != null ? secondBaseRunner.text() : "없음");
-        baseRunners.put("3루", thirdBaseRunner != null ? thirdBaseRunner.text() : "없음");
+        baseRunners.put("1Base", firstBaseRunner != null ? firstBaseRunner.text() : "None");
+        baseRunners.put("2Base", secondBaseRunner != null ? secondBaseRunner.text() : "None");
+        baseRunners.put("3Base", thirdBaseRunner != null ? thirdBaseRunner.text() : "None");
 
         CurrentPlayDto currentPlay = new CurrentPlayDto(
                 getText(doc.selectFirst(".playerName .supervision2")),
@@ -109,11 +108,11 @@ public class AspxPageParser {
         List<OtherGameDto> otherGames = doc.select(".otherGame .items table").stream()
                 .map(table -> new OtherGameDto(
                         getText(table.selectFirst("a")),
-                        getText(table.selectFirst("tr:nth-of-type(1) td:nth-of-type(1)")),
-                        getText(table.selectFirst("tr:nth-of-type(1) td:nth-of-type(2) em")),
+                        getText(table.selectFirst("tr:nth-of-type(1) td:nth-of-type(2)")),
+                        getText(table.selectFirst("tr:nth-of-type(1) td:nth-of-type(3) em")),
                         getText(table.selectFirst("tr:nth-of-type(2) td:nth-of-type(1)")),
                         getText(table.selectFirst("tr:nth-of-type(2) td:nth-of-type(2) em")),
-                        getText(table.selectFirst(".groundBase img")),
+                        table.selectFirst(".groundBase img").attr("alt"),
                         getText(table.selectFirst(".groundBase span"))
                 )).collect(Collectors.toList());
 
@@ -133,8 +132,8 @@ public class AspxPageParser {
         // 팀 이름과 엠블럼
         Element teamNameElement = doc.selectFirst(teamSelector + " .who");
         Element teamEmblemElement = doc.selectFirst(teamSelector + " .player-img img.team");
-        teamInfo.put("팀이름", teamNameElement != null ? teamNameElement.ownText() : "");
-        teamInfo.put("엠블럼", teamEmblemElement != null ? teamEmblemElement.attr("src") : "");
+        teamInfo.put("teamName", teamNameElement != null ? teamNameElement.ownText() : "");
+        teamInfo.put("teamEmblem", teamEmblemElement != null ? teamEmblemElement.attr("src") : "");
 
         // 선수 성적 -타자
         List<Map<String, String>> batters = new ArrayList<>();
@@ -142,14 +141,13 @@ public class AspxPageParser {
         for (Element row : batterRows) {
             Map<String, String> player = new HashMap<>();
             List<Element> cols = row.select("td");
-            player.put("포지션", cols.get(0).text());
-            player.put("이름", cols.get(1).text());
-            player.put("타수", cols.get(2).text()); // 타수
-            player.put("득점", cols.get(3).text()); // 득점
-            player.put("안타", cols.get(4).text()); // 안타
+            player.put("position", cols.get(0).text());
+            player.put("name", cols.get(1).text());
+            player.put("ab", cols.get(2).text()); // 타수
+            player.put("runs", cols.get(3).text()); // 득점
+            player.put("hits", cols.get(4).text()); // 안타
             batters.add(player);
         }
-        teamInfo.put("타자", batters);
 
         // 선수 성적 - 투수
         List<Map<String, String>> pitchers = new ArrayList<>();
@@ -157,11 +155,11 @@ public class AspxPageParser {
         for (Element row : pitcherRows) {
             Map<String, String> player = new HashMap<>();
             List<Element> cols = row.select("td");
-            player.put("이름", cols.get(0).text());
-            player.put("이닝", cols.get(1).text());
-            player.put("안타", cols.get(2).text());
-            player.put("삼진", cols.get(3).text());
-            player.put("자책", cols.get(4).text());
+            player.put("name", cols.get(0).text());
+            player.put("innings", cols.get(1).text());
+            player.put("hits", cols.get(2).text());
+            player.put("strikeOuts", cols.get(3).text());
+            player.put("earnedRuns", cols.get(4).text());
             pitchers.add(player);
         }
 
