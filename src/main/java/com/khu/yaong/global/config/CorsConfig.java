@@ -13,7 +13,7 @@ public class CorsConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000","http://yaong.site","http://ec2-3-35-127-51.ap-northeast-2.compute.amazonaws.com:3000"));
+        configuration.setAllowedOrigins(List.of("http://localhost:3000","http://yaong.site:3000","http://ec2-3-35-127-51.ap-northeast-2.compute.amazonaws.com:3000"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
