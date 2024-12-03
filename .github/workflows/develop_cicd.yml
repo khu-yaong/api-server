@@ -1,9 +1,12 @@
 name: Java Build and Deploy on develop
 
 on:
+  push:
+    branches: [ "develop" ]
   pull_request:
     branches: [ "develop" ]
     types:
+      - opened
       - closed
 
 jobs:
@@ -63,4 +66,3 @@ jobs:
             sudo docker-compose pull
             sudo docker-compose up -d
             sudo docker image prune -f
-            

@@ -38,6 +38,9 @@ public class S3ImageService {
     @Value("${cloud.aws.accounts.first-account.s3.bucket-name}")
     private String bucketName;
 
+    @Value("${cloud.aws.s3.default-profile}")
+    private String defaultProfile;
+
     public String uploadImage(String dir, MultipartFile image) {
         // image가 비어있으면 오류
         if (image.isEmpty() || Objects.isNull(image.getOriginalFilename())) {
@@ -105,6 +108,9 @@ public class S3ImageService {
 
     public void deleteImageFromS3(String imageUrl) {
         if (imageUrl == null || imageUrl.isEmpty()) {
+            return ;
+        }
+        if (imageUrl.equals(defaultProfile)) {
             return ;
         }
         String key = getKeyFromImageAddress(imageUrl);

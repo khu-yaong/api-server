@@ -7,7 +7,7 @@ public interface CommentService {
 
 /*---------------------------------------- 댓글 ----------------------------------------*/
 
-    CommentResDTO.CommentDetailDTO createComment(Long postId, CommentReqDTO commentReqDTO);
+    CommentResDTO.CommentInfoDTO createComment(Long postId, CommentReqDTO commentReqDTO);
 
-    CommentResDTO.CommentDetailDTO deleteComment(Long commentId);
+    CommentResDTO.CommentInfoDTO deleteComment(Long commentId);
 }

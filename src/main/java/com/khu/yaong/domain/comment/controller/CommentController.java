@@ -25,10 +25,10 @@ public class CommentController {
     * output : 작성된 댓글의 상세 정보
     """)
     @PostMapping("/posts/{postId}/comments")
-    ApiResponse<CommentResDTO.CommentDetailDTO> createComment(
+    ApiResponse<CommentResDTO.CommentInfoDTO> createComment(
             @PathVariable Long postId, @RequestBody CommentReqDTO commentReqDTO) {
-        CommentResDTO.CommentDetailDTO commentDetailDTO = commentService.createComment(postId, commentReqDTO);
-        return ApiResponse.success(CommentSuccessCode.COMMENT_CREATED, commentDetailDTO);
+        CommentResDTO.CommentInfoDTO commentInfoDTO = commentService.createComment(postId, commentReqDTO);
+        return ApiResponse.success(CommentSuccessCode.COMMENT_CREATED, commentInfoDTO);
     }
 
     @Operation(summary = "[구현완료] 게시글 댓글 삭제하기", description = """
@@ -37,8 +37,8 @@ public class CommentController {
     * output : 삭제된 댓글의 상세 정보
     """)
     @DeleteMapping("/comments/{commentId}")
-    ApiResponse<CommentResDTO.CommentDetailDTO> deleteComment(@PathVariable Long commentId) {
-        CommentResDTO.CommentDetailDTO commentDetailDTO = commentService.deleteComment(commentId);
-        return ApiResponse.success(CommentSuccessCode.COMMENT_DELETED, commentDetailDTO);
+    ApiResponse<CommentResDTO.CommentInfoDTO> deleteComment(@PathVariable Long commentId) {
+        CommentResDTO.CommentInfoDTO commentInfoDTO = commentService.deleteComment(commentId);
+        return ApiResponse.success(CommentSuccessCode.COMMENT_DELETED, commentInfoDTO);
     }
 }
