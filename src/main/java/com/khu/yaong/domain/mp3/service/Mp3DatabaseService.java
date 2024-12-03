@@ -1,12 +1,17 @@
 package com.khu.yaong.domain.mp3.service;
 
 import com.khu.yaong.domain.mp3.domain.Mp3File;
+import com.khu.yaong.domain.mp3.dto.request.Mp3FileReqDto;
+import com.khu.yaong.domain.mp3.dto.response.Mp3FileResDto;
 import com.khu.yaong.domain.mp3.repository.Mp3FileRepository;
+import com.khu.yaong.global.common.response.ErrorCode;
 import com.khu.yaong.global.s3.S3Mp3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,8 +39,25 @@ public class Mp3DatabaseService {
             }
         }
     }
+
+    // 특정 MP3 파일 데이터 조회
+    public Mp3FileResDto getMp3File(String filename){
+        Mp3File mp3File = mp3FileRepository.findByFileName(filename)
+                .orElseThrow(() -> new NoSuchElementException(ErrorCode.INTERNAL_SERVER_ERROR.toString()));
+        return new Mp3FileResDto(mp3File);
+    }
+
     // 모든 MP3 파일 데이터 조회
     public List<Mp3File> getAllMp3Files() {
         return mp3FileRepository.findAll();
+    }
+
+    // 팀 공식/선수 응원가 목록 조회
+    public List<Mp3FileResDto> getSongsByTeamAndCategory(String teamName, String category) {
+        List<Mp3File> mp3File = mp3FileRepository.findByTeamNameAndCategory(teamName, category);
+            return mp3File.stream()
+                    .map(Mp3FileResDto::new)
+                    .collect(Collectors.toList());
+
     }
 }
