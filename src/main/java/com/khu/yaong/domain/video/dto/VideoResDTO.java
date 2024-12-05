@@ -27,13 +27,13 @@ public class VideoResDTO {
     }
 
     @Getter
-    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    @Builder(access = AccessLevel.PRIVATE)
+    @RequiredArgsConstructor
+    @Builder
     public static class RecommendationDTO {
         private final List<RecommendedVideoDTO> recommendVideos;
         public static RecommendationDTO toDTO(RecommendationMapDTO mapDTO) {
             return RecommendationDTO.builder()
-                    .recommendVideos(mapDTO.getRecommendVideos().stream()
+                    .recommendVideos(mapDTO.getRecommendedVideos().stream()
                             .map(RecommendedVideoDTO::toDTO)
                             .toList())
                     .build();
@@ -41,8 +41,8 @@ public class VideoResDTO {
     }
 
     @Getter
-    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    @Builder(access = AccessLevel.PRIVATE)
+    @RequiredArgsConstructor
+    @Builder
     public static class RecommendedVideoDTO {
         private final Team team;
         private final String videoId;
@@ -64,8 +64,7 @@ public class VideoResDTO {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor
     public static class RecommendationMapDTO {
-        @JsonProperty("recommended_videos")
-        private List<RecommendedVideoMapDTO> recommendVideos;
+        private List<RecommendedVideoMapDTO> recommendedVideos;
     }
 
     @Getter
