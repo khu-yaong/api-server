@@ -8,5 +8,6 @@ import java.util.concurrent.CompletableFuture;
 public interface ViewService {
 
     VideoResDTO.UpdatedViewDTO getVideoAndUpdateView(String videoId);
-    //CompletableFuture<String> updateRecommendVideos(VideoReqDTO.LambdaRequestDTO lambdaRequestDTO);
+
+    VideoResDTO.RecommendationDTO getRecommendedVideos();
 }
