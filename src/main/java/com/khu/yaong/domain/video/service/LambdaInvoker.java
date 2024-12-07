@@ -6,7 +6,7 @@ import com.khu.yaong.domain.video.dto.VideoReqDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.*;
 import software.amazon.awssdk.core.SdkBytes;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.lambda.LambdaClient;
@@ -21,6 +21,12 @@ public class LambdaInvoker {
     @Value("${cloud.aws.accounts.first-account.region.static}")
     private String region;
 
+    @Value("${cloud.aws.accounts.first-account.credentials.access-key}")
+    private String accessKey;
+
+    @Value("${cloud.aws.accounts.first-account.credentials.secret-key}")
+    private String secretKey;
+
     @Value("${cloud.aws.accounts.first-account.lambda.url}")
     private String functionUrl;
 
@@ -32,9 +38,15 @@ public class LambdaInvoker {
 
     public void callLambda(VideoReqDTO.LambdaRequestDTO lambdaRequestDTO) {
 
+        AwsCredentials awsCredentials = AwsBasicCredentials.create(accessKey, secretKey);
+
+        // Credentials Provider 설정
+        StaticCredentialsProvider credentialsProvider = StaticCredentialsProvider.create(awsCredentials);
+
+
         LambdaClient lambdaClient = LambdaClient.builder()
                 .region(Region.of(region))
-                .credentialsProvider(DefaultCredentialsProvider.create())
+                .credentialsProvider(credentialsProvider)
                 .build();
 
         try {
