@@ -21,6 +21,7 @@ public class PlayerResDTO {
 
         private final Long playerId;
         private final Team team;
+        private final String profile;
         private final String name;
         private final Integer no;
         private final String position;
@@ -50,6 +51,7 @@ public class PlayerResDTO {
             return PlayerInfoDTO.builder()
                     .playerId(player.getId())
                     .team(player.getTeam())
+                    .profile(player.getProfile())
                     .name(player.getName())
                     .no(player.getNo())
                     .position(player.getPosition())
@@ -69,6 +71,7 @@ public class PlayerResDTO {
     public static class PlayerDetailDTO {
         private final Long playerId;
         private final Team team;
+        private final String profile;
         private final String name;
         private final Integer no;
         private final String position;
@@ -81,6 +84,7 @@ public class PlayerResDTO {
             return PlayerDetailDTO.builder()
                     .playerId(player.getId())
                     .team(player.getTeam())
+                    .profile(player.getProfile())
                     .name(player.getName())
                     .no(player.getNo())
                     .position(player.getPosition())
