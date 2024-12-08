@@ -44,6 +44,7 @@ public class PlayerDataLoader implements CommandLineRunner {
 
             for (final CSVRecord csvRecord : csvParser) {
                 PlayerDTO playerDTO = PlayerDTO.builder()
+                        .profile(csvRecord.get("profile"))
                         .avg(csvRecord.get("avg"))
                         .bb(csvRecord.get("bb"))
                         .birth(csvRecord.get("birth"))
