@@ -22,6 +22,15 @@ public class MemberController {
     private final MemberService memberService;
     private final AuthService authService;
 
+    /*// 회원정보 가져오는 메서드
+    @GetMapping("/info")
+    public ResponseEntity<ApiResponse<MemberInfoResponseDto>> getMemberInfo() {
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        log.info("MemberId : {}", memberId);
+        MemberInfoResponseDto memberInfo = memberService.getMemberInfo(memberId);
+        log.info("Member Info: {}", memberInfo);
+        return ResponseEntity.ok(ApiResponse.success(MemberSuccessCode.INFO_SUCCESS, memberInfo));
+    }*/
     // 회원정보 조회
     @GetMapping("/info")
     public ResponseEntity<ApiResponse<MemberProfileResponseDto>> getMemberProfile(@AuthenticationPrincipal CustomUserDetails userDetails) {
@@ -49,5 +58,4 @@ public class MemberController {
         authService.withdraw(token);
         return ResponseEntity.ok(ApiResponse.success(MemberSuccessCode.WITHDRAW_SUCCESS));
     }
-
 }

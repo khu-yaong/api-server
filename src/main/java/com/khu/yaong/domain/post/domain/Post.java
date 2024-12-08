@@ -1,9 +1,5 @@
 package com.khu.yaong.domain.post.domain;
 
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.khu.yaong.domain.comment.domain.Comment;
 import com.khu.yaong.domain.common.BaseTime;
 import com.khu.yaong.domain.mapping.domain.MemberPostLike;
@@ -30,7 +26,6 @@ public class Post extends BaseTime {
     @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
-    @JsonBackReference
     private Member author; // 작성자
 
     @Enumerated(EnumType.STRING)
@@ -55,7 +50,6 @@ public class Post extends BaseTime {
 
     @Builder.Default
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
     private List<Comment> comments = new ArrayList<>();
 
     @Builder.Default

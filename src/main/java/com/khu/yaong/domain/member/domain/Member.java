@@ -1,12 +1,12 @@
 
 package com.khu.yaong.domain.member.domain;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.khu.yaong.domain.common.BaseTime;
 import com.khu.yaong.domain.mapping.domain.MemberPostLike;
 import com.khu.yaong.domain.member.dto.request.MemberProfileReqDto;
 import com.khu.yaong.domain.post.domain.Post;
 import com.khu.yaong.domain.diary.domain.Diary;
+import com.khu.yaong.domain.video.domain.View;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -52,7 +52,6 @@ public class Member extends BaseTime {
 
     @Builder.Default
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
     private List<Post> posts = new ArrayList<>();
 
     @Builder.Default
@@ -62,6 +61,7 @@ public class Member extends BaseTime {
     @Builder.Default
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<View> views = new ArrayList<>();
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "member_roles", joinColumns = @JoinColumn(name = "member_id"))
     @Column(name = "role")
@@ -111,10 +111,8 @@ public class Member extends BaseTime {
                 .build();
     }
 
-
     public void addView(View view) {
         views.add(view);
     }
-
 }
 

@@ -1,11 +1,14 @@
 package com.khu.yaong.domain.member.dto.response;
 
 import com.khu.yaong.domain.member.domain.Team;
-import com.khu.yaong.domain.post.dto.PostResDTO;
+import com.khu.yaong.domain.post.domain.Post;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
-import java.util.List;
+import lombok.Setter;
 
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Builder
@@ -16,5 +19,5 @@ public class MemberProfileResponseDto {
     private int level;
     private int experience;
     private int nextLevelExp;
-    private List<PostResDTO.PostInfoDTO> postList;
+    private List<Post> postList;
 }
