@@ -6,12 +6,10 @@ import com.khu.yaong.domain.member.dto.response.MemberProfileResponseDto;
 import com.khu.yaong.domain.member.exception.MemberErrorCode;
 import com.khu.yaong.domain.member.exception.MemberException;
 import com.khu.yaong.domain.member.repository.MemberRepository;
-import com.khu.yaong.domain.post.domain.Post;
+import com.khu.yaong.domain.post.dto.PostResDTO;
 import com.khu.yaong.domain.post.repository.PostRepository;
-import com.khu.yaong.domain.post.repository.PostRepositoryCustomImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -27,7 +25,11 @@ public class MemberService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
 
-        List<Post> posts = postRepository.findByAuthorId(memberId);
+        List<PostResDTO.PostInfoDTO> posts = postRepository.findByAuthorId(memberId)
+                .stream()
+                .map(post -> PostResDTO.PostInfoDTO.toDTO(post, false))
+                .toList();
+
 
         return MemberProfileResponseDto.builder()
                 .username(member.getUsername())
