@@ -7,6 +7,7 @@ import com.khu.yaong.domain.mapping.domain.MemberPostLike;
 import com.khu.yaong.domain.member.dto.request.MemberProfileReqDto;
 import com.khu.yaong.domain.post.domain.Post;
 import com.khu.yaong.domain.diary.domain.Diary;
+import com.khu.yaong.domain.video.domain.View;
 import jakarta.persistence.*;
 import lombok.*;
 

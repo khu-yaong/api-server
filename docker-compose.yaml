@@ -1,19 +1,12 @@
 version: '3.8'
 
 services:
-  redis:
-    image: redis:latest
-    container_name: redis
-    ports:
-      - "6379:6379"
-
   app:
     image: ${DOCKER_USERNAME}/yaong:latest
     container_name: app
     ports:
-      - "8081:8081"
+      - "8080:8080"
     environment:
-      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_HOST: ${REDIS_HOST} # 외부 Redis 호스트
       SPRING_REDIS_PORT: 6379
-    depends_on:  # Redis가 먼저 실행되도록 설정
-      - redis
+    depends_on: [] # Redis 의존성 제거
