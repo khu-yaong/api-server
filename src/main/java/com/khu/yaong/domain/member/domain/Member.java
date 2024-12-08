@@ -59,6 +59,9 @@ public class Member extends BaseTime {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MemberPostLike> memberPostLikes = new ArrayList<>();
 
+    @Builder.Default
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<View> views = new ArrayList<>();
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "member_roles", joinColumns = @JoinColumn(name = "member_id"))
     @Column(name = "role")
@@ -107,5 +110,11 @@ public class Member extends BaseTime {
                 .profileImage(memberProfileReqDto.getImageUrl() != null ? memberProfileReqDto.getImageUrl() : this.profileImage) // 기존 프로필 이미지 유지
                 .build();
     }
+
+
+    public void addView(View view) {
+        views.add(view);
+    }
+
 }
 

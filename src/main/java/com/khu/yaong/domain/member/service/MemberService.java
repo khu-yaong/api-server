@@ -30,6 +30,7 @@ public class MemberService {
                 .map(post -> PostResDTO.PostInfoDTO.toDTO(post, false))
                 .toList();
 
+
         return MemberProfileResponseDto.builder()
                 .username(member.getUsername())
                 .team(member.getTeam())
