@@ -14,6 +14,7 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class PlayerDTO {
 
+    private final String profile;
     private final String avg;
     private final String bb;
     private final String birth;
@@ -47,6 +48,7 @@ public class PlayerDTO {
                 .position(position)
                 .birth(LocalDate.parse(birth))
                 .hwSpec(hw)
+                .profile("http:" + profile)
                 .build();
     }
 

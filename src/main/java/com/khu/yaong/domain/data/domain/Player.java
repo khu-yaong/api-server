@@ -37,6 +37,9 @@ public class Player {
     @Column(length = 30)
     private String hwSpec;
 
+    @Column
+    private String profile;
+
     @Setter
     @OneToOne(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true)
     private Pitcher pitcher = null;
